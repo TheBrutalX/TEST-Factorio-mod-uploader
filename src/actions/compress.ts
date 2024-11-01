@@ -11,7 +11,7 @@ export default class CompressProcess implements IBaseProcess {
 
     parseInputs(): void {
         this.modName = core.getInput('MOD_NAME', { required: true });
-        this.modPath = core.getInput('MOD_PATH', { required: true });
+        this.modPath = core.getInput('MOD-DIR', { required: true });
         this.modVersion = core.getInput('MOD_VERSION', { required: true });
         this.tmpPath = process.env.RUNNER_TEMP || '';
 
