@@ -8,7 +8,7 @@ inputs:
   action:
     description: "Action to perform"
     required: true
-  mod-path:
+  mod-folder:
     description: "Path to the mod folder to upload"
     required: false
   factorio-token:

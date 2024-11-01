@@ -33,7 +33,7 @@ jobs:
         uses: actions/factorio-mod-uploader@1
         with:
           action: validate
-          mod-dir: ./test_mod
+          MOD-FOLDER: ./test_mod
 
       - name: Create zip
         uses: actions/factorio-mod-uploader@1

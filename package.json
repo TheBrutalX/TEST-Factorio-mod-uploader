@@ -7,7 +7,7 @@
     "build": "webpack",
     "start": "node dist/index.js",
     "run": "npm run build && npm start",
-    "debug:run": "node --env-file=.env -r ts-node/register test.ts",
+    "debug:run": "node --env-file=.env -r ts-node/register src/test.ts",
     "pretty": "prettier --write \"./src/**/*.ts\""
   },
   "author": "",

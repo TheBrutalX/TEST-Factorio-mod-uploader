@@ -9,7 +9,7 @@ export default class ValidateProcess implements IBaseProcess {
     private modPath: string = '';
 
     parseInputs(): void {
-        this.modPath = core.getInput('MOD-DIR', { required: false });
+        this.modPath = core.getInput('MOD-FOLDER', { required: false });
         if (!this.modPath) this.modPath = process.cwd();
     }
 
@@ -42,7 +42,7 @@ export default class ValidateProcess implements IBaseProcess {
 
         core.exportVariable('MOD_NAME', info.name);
         core.exportVariable('MOD_VERSION', info.version);
-        core.exportVariable('MOD-DIR', this.modPath);
+        core.exportVariable('MOD-FOLDER', this.modPath);
     }
 
     private async checkOnlineVersion(
