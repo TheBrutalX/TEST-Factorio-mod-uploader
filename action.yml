@@ -1,6 +1,9 @@
 name: "Factorio Mod Uploader"
 description: "Upload a Factorio mod with preliminary checks"
 author: "TheBrutalX"
+branding:
+  icon: "activity"
+  color: "green"
 inputs:
   action:
     description: "Action to perform"
