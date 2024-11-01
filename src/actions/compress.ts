@@ -10,9 +10,9 @@ export default class CompressProcess implements IBaseProcess {
     private tmpPath: string = '';
 
     parseInputs(): void {
-        this.modName = core.getInput('FMU_MOD_NAME', { required: true });
-        this.modPath = core.getInput('FMU_MOD_PATH', { required: true });
-        this.modVersion = core.getInput('FMU_MOD_VERSION', { required: true });
+        this.modName = core.getInput('MOD_NAME', { required: true });
+        this.modPath = core.getInput('MOD_PATH', { required: true });
+        this.modVersion = core.getInput('MOD_VERSION', { required: true });
         this.tmpPath = process.env.RUNNER_TEMP || '';
 
         if (!this.tmpPath) throw new Error('RUNNER_TEMP is required');
@@ -28,7 +28,7 @@ export default class CompressProcess implements IBaseProcess {
         const absolutePath = await zipDirectory(zipDir, zipPath);
         rm(zipDir, { recursive: true });
         core.info(`Zip file created: ${absolutePath}`);
-        core.exportVariable('FMU_ZIP_PATH', absolutePath);
+        core.exportVariable('ZIP_PATH', absolutePath);
     }
 
     private normalizedZipName(): string {

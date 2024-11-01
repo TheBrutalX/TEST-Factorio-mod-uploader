@@ -10,9 +10,9 @@ export default class UploadProcess implements IBaseProcess {
     private modApiToken: string = '';
 
     parseInputs(): void {
-        this.modName = core.getInput('FMU_MOD_NAME', { required: true });
-        this.modZipPath = core.getInput('FMU_ZIP_PATH', { required: true });
-        this.modApiToken = core.getInput('FMU_API_TOKEN', { required: true });
+        this.modName = core.getInput('MOD_NAME', { required: true });
+        this.modZipPath = core.getInput('ZIP_PATH', { required: true });
+        this.modApiToken = core.getInput('API_TOKEN', { required: true });
 
         if (existsSync(this.modZipPath) === false) {
             throw new Error(`File not found: ${this.modZipPath}`);

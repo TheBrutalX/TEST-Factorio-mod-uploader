@@ -9,7 +9,7 @@ export default class ValidateProcess implements IBaseProcess {
     private modPath: string = '';
 
     parseInputs(): void {
-        this.modPath = core.getInput('FMU_MOD_PATH', { required: true });
+        this.modPath = core.getInput('MOD_PATH', { required: true });
     }
 
     async run(): Promise<void> {
@@ -39,9 +39,9 @@ export default class ValidateProcess implements IBaseProcess {
                 'Mod already exists on the mod portal with the same version'
             );
 
-        core.exportVariable('FMU_MOD_NAME', info.name);
-        core.exportVariable('FMU_MOD_VERSION', info.version);
-        core.exportVariable('FMU_MOD_PATH', this.modPath);
+        core.exportVariable('MOD_NAME', info.name);
+        core.exportVariable('MOD_VERSION', info.version);
+        core.exportVariable('MOD_PATH', this.modPath);
     }
 
     private async checkOnlineVersion(
