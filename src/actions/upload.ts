@@ -26,6 +26,7 @@ export default class UploadProcess extends BaseProcess {
         await this.uploadMod(uploadUrl);
     }
     async getUploadUrl(): Promise<string> {
+        core.debug('Getting upload URL');
         return await FactorioModPortalApiService.ModUploadInit(
             this.modApiToken,
             this.modName
@@ -33,6 +34,7 @@ export default class UploadProcess extends BaseProcess {
     }
 
     async uploadMod(upload_url: string): Promise<void> {
+        core.debug('Uploading mod');
         FactorioModPortalApiService.ModUploadFinish(
             this.modApiToken,
             upload_url,

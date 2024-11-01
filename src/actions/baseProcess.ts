@@ -22,7 +22,7 @@ export default abstract class BaseProcess implements IBaseProcess {
             throw new Error(`Input required and not supplied: ${name}`);
         }
         // if user value is provided, return it
-        if (userValue) return userValue.trim();
-        return envValue!.trim();
+        if (userValue) return userValue;
+        else return envValue!;
     }
 }
