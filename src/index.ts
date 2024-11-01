@@ -30,6 +30,7 @@ export async function run(): Promise<boolean> {
         return false;
     }
 }
+
 if (process.env.NODE_ENV !== 'development') {
     run();
 }
