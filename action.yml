@@ -15,5 +15,5 @@ inputs:
     description: "API token for authenticating with the Factorio store"
     required: false
 runs:
-  using: "node16"
+  using: "node20"
   main: "dist/bundle.js"
