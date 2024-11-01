@@ -17,8 +17,11 @@ inputs:
   mod-version:
     description: "Version of the mod to upload"
     required: false
-  factorio-token:
+  factorio-api-key:
     description: "API token for authenticating with the Factorio store"
+    required: false
+  zip-file:
+    description: "Path to the zip file to upload"
     required: false
 runs:
   using: "node20"

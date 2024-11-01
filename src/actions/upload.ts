@@ -11,8 +11,10 @@ export default class UploadProcess implements IBaseProcess {
 
     parseInputs(): void {
         this.modName = core.getInput('MOD-NAME', { required: true });
-        this.modZipPath = core.getInput('ZIP-PATH', { required: true });
-        this.modApiToken = core.getInput('API-TOKEN', { required: true });
+        this.modZipPath = core.getInput('ZIP-FILE', { required: true });
+        this.modApiToken = core.getInput('FACTORIO-API-KEY', {
+            required: true,
+        });
 
         if (existsSync(this.modZipPath) === false) {
             throw new Error(`File not found: ${this.modZipPath}`);

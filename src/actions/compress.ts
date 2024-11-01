@@ -28,7 +28,7 @@ export default class CompressProcess implements IBaseProcess {
         const absolutePath = await zipDirectory(zipDir, zipPath);
         rm(zipDir, { recursive: true });
         core.info(`Zip file created: ${absolutePath}`);
-        core.exportVariable('ZIP_PATH', absolutePath);
+        core.exportVariable('ZIP_FILE', absolutePath);
     }
 
     private normalizedZipName(): string {
