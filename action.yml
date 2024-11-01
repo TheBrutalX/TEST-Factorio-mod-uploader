@@ -11,6 +11,12 @@ inputs:
   mod-folder:
     description: "Path to the mod folder to upload"
     required: false
+  mod-name:
+    description: "Name of the mod to upload"
+    required: false
+  mod-version:
+    description: "Version of the mod to upload"
+    required: false
   factorio-token:
     description: "API token for authenticating with the Factorio store"
     required: false
