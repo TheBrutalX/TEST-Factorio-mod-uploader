@@ -37,7 +37,7 @@ export default class FactorioModPortalApiService {
         token: string,
         modName: string
     ): Promise<string> {
-        const url = `${modApiUrl}v2/mods/releases/init_upload`;
+        const url = `${modApiUrl}/v2/mods/releases/init_upload`;
         const formData = new FormData();
         formData.append('mod', modName);
         try {
@@ -61,10 +61,15 @@ export default class FactorioModPortalApiService {
                         'The API token does not have permission to upload mods'
                     );
                 if (e.response?.status === 404) {
-                    if (e.response.data.error === 'UnknownMod') {
-                        throw new Error(
-                            `The mod ${modName} does not exist on the mod portal, please create it first`
-                        );
+                    if (e.response.data.error) {
+                        switch (e.response.data.error) {
+                            case 'UnknownMod':
+                                throw new Error('The mod does not exist');
+                            case 'InvalidMod':
+                                throw new Error('The mod name is invalid');
+                            default:
+                                throw e;
+                        }
                     } else {
                         throw e;
                     }
