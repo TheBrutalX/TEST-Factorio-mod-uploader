@@ -10,7 +10,7 @@ export default class ValidateProcess implements IBaseProcess {
 
     parseInputs(): void {
         this.modPath = core.getInput('MOD-FOLDER', { required: false });
-        if (!this.modPath) this.modPath = process.cwd();
+        if (!this.modPath) this.modPath = process.env.GITHUB_WORKSPACE!;
     }
 
     async run(): Promise<void> {
