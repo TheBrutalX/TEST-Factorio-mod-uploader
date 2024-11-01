@@ -1,18 +1,18 @@
-import { IBaseProcess } from '../interfaces/IBaseProcess';
 import * as core from '@actions/core';
 import { zipDirectory } from '../utils/zipper';
 import { cp, mkdir, rm } from 'fs/promises';
 import { join } from 'path';
-export default class CompressProcess implements IBaseProcess {
+import BaseProcess from './baseProcess';
+export default class CompressProcess extends BaseProcess {
     private modName: string = '';
     private modPath: string = '';
     private modVersion: string = '';
     private tmpPath: string = '';
 
     parseInputs(): void {
-        this.modName = core.getInput('MOD-NAME', { required: true });
-        this.modPath = core.getInput('MOD-FOLDER', { required: true });
-        this.modVersion = core.getInput('MOD-VERSION', { required: true });
+        this.modName = this.getInput('MOD-NAME');
+        this.modPath = this.getInput('MOD-FOLDER');
+        this.modVersion = this.getInput('MOD-VERSION');
         this.tmpPath = process.env.RUNNER_TEMP || '';
 
         if (!this.tmpPath) throw new Error('RUNNER_TEMP is required');

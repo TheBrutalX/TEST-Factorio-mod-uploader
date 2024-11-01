@@ -1,20 +1,18 @@
-import { IBaseProcess } from '../interfaces/IBaseProcess';
 import * as core from '@actions/core';
 import { existsSync } from 'fs';
 import FormData from 'form-data';
 import FactorioModPortalApiService from '../services/FactorioModPortalApiService';
+import BaseProcess from './baseProcess';
 
-export default class UploadProcess implements IBaseProcess {
+export default class UploadProcess extends BaseProcess {
     private modName: string = '';
     private modZipPath: string = '';
     private modApiToken: string = '';
 
     parseInputs(): void {
-        this.modName = core.getInput('MOD-NAME', { required: true });
-        this.modZipPath = core.getInput('ZIP-FILE', { required: true });
-        this.modApiToken = core.getInput('FACTORIO-API-KEY', {
-            required: true,
-        });
+        this.modName = this.getInput('MOD-NAME');
+        this.modZipPath = this.getInput('ZIP-FILE');
+        this.modApiToken = this.getInput('FACTORIO-API-KEY');
 
         if (existsSync(this.modZipPath) === false) {
             throw new Error(`File not found: ${this.modZipPath}`);

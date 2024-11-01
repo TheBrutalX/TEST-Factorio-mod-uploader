@@ -2,15 +2,15 @@ import * as core from '@actions/core';
 import path from 'path';
 import semver from 'semver';
 import fs from 'fs';
-import { IBaseProcess } from '../interfaces/IBaseProcess';
 import FactorioModPortalApiService from '../services/FactorioModPortalApiService';
 import { readFile } from 'fs/promises';
+import BaseProcess from './baseProcess';
 
-export default class ValidateProcess implements IBaseProcess {
+export default class ValidateProcess extends BaseProcess {
     private modPath: string = '';
 
     parseInputs(): void {
-        this.modPath = core.getInput('MOD-FOLDER', { required: false });
+        this.modPath = this.getInput('MOD-FOLDER', false);
         if (!this.modPath) this.modPath = process.env.GITHUB_WORKSPACE!;
     }
 
