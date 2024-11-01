@@ -1,0 +1,16 @@
+name: "Factorio Mod Uploader"
+description: "Upload a Factorio mod with preliminary checks"
+author: "TheBrutalX"
+inputs:
+  action:
+    description: "Action to perform"
+    required: true
+  mod_path:
+    description: "Path to the mod folder to upload"
+    required: false
+  factorio_token:
+    description: "API token for authenticating with the Factorio store"
+    required: false
+runs:
+  using: "node16"
+  main: "dist/index.js"

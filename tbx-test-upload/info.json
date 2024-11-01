@@ -1,0 +1,8 @@
+{
+  "name": "tbx-test-upload",
+  "version": "0.0.3",
+  "title": "Test Upload",
+  "author": "TheBrutalX",
+  "factorio_version": "2.0",
+  "dependencies": ["base"]
+}
