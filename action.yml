@@ -8,10 +8,10 @@ inputs:
   action:
     description: "Action to perform"
     required: true
-  mod_path:
+  mod-path:
     description: "Path to the mod folder to upload"
     required: false
-  factorio_token:
+  factorio-token:
     description: "API token for authenticating with the Factorio store"
     required: false
 runs:
