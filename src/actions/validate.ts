@@ -4,6 +4,7 @@ import semver from 'semver';
 import fs from 'fs';
 import { IBaseProcess } from '../interfaces/IBaseProcess';
 import FactorioModPortalApiService from '../services/FactorioModPortalApiService';
+import { readFile } from 'fs/promises';
 
 export default class ValidateProcess implements IBaseProcess {
     private modPath: string = '';
@@ -16,7 +17,9 @@ export default class ValidateProcess implements IBaseProcess {
     async run(): Promise<void> {
         const infoPath = path.join(this.modPath, 'info.json');
         if (!fs.existsSync(infoPath)) throw new Error('info.json not found');
-        const info = require(infoPath);
+        core.debug('info.json path: ' + infoPath);
+        const infoRaw = await readFile(infoPath, 'utf8');
+        const info = JSON.parse(infoRaw);
 
         if (!info.name) throw new Error('Missing mod name in info.json');
         if (!info.version) throw new Error('Missing mod version in info.json');
