@@ -43,8 +43,8 @@ export default class ValidateProcess implements IBaseProcess {
                 'Mod already exists on the mod portal with the same version'
             );
 
-        core.exportVariable('MOD_NAME', info.name);
-        core.exportVariable('MOD_VERSION', info.version);
+        core.exportVariable('MOD-NAME', info.name);
+        core.exportVariable('MOD-VERSION', info.version);
         core.exportVariable('MOD-FOLDER', this.modPath);
     }
 

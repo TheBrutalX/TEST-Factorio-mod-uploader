@@ -10,9 +10,9 @@ export default class CompressProcess implements IBaseProcess {
     private tmpPath: string = '';
 
     parseInputs(): void {
-        this.modName = core.getInput('MOD_NAME', { required: true });
+        this.modName = core.getInput('MOD-NAME', { required: true });
         this.modPath = core.getInput('MOD-FOLDER', { required: true });
-        this.modVersion = core.getInput('MOD_VERSION', { required: true });
+        this.modVersion = core.getInput('MOD-VERSION', { required: true });
         this.tmpPath = process.env.RUNNER_TEMP || '';
 
         if (!this.tmpPath) throw new Error('RUNNER_TEMP is required');
