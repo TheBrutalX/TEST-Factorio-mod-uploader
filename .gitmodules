@@ -1,0 +1,4 @@
+[submodule "test_mod"]
+	path = test_mod
+	url = https://github.com/TheBrutalX/Factorio-Test-Mod
+	branch = main
