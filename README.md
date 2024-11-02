@@ -1,3 +1,7 @@
+[![Release](https://github.com/TheBrutalX/factorio-mod-uploader-action/actions/workflows/release.yml/badge.svg)](https://github.com/TheBrutalX/factorio-mod-uploader-action/actions/workflows/release.yml)
+
+[![Tests](https://github.com/TheBrutalX/factorio-mod-uploader-action/actions/workflows/tests.yml/badge.svg)](https://github.com/TheBrutalX/factorio-mod-uploader-action/actions/workflows/tests.yml)
+
 # Factorio Mod Uploader Action
 
 A GitHub Action to automate uploading Factorio mods to the [Factorio Mod Portal](https://mods.factorio.com/).
