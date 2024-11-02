@@ -85,17 +85,17 @@ describe('CompressProcess', () => {
         (compressProcess as any)['tmpPath'] = '/tmp'; // Override tmpPath
         await compressProcess.run();
 
-        expect(mkdir).toHaveBeenCalledWith('\\tmp\\zip\\test-mod', {
+        expect(mkdir).toHaveBeenCalledWith('/tmp/zip/test-mod', {
             recursive: true,
         });
-        expect(cp).toHaveBeenCalledWith('/folder', '\\tmp\\zip\\test-mod', {
+        expect(cp).toHaveBeenCalledWith('/folder', '/tmp/zip/test-mod', {
             recursive: true,
         });
         expect(zipDirectory).toHaveBeenCalledWith(
-            '\\tmp\\zip',
+            '/tmp/zip',
             '/tmp/test-mod_1.0.0.zip'
         );
-        expect(rm).toHaveBeenCalledWith('\\tmp\\zip', { recursive: true });
+        expect(rm).toHaveBeenCalledWith('/tmp/zip', { recursive: true });
         expect(core.info).toHaveBeenCalledWith(
             'Creating zip file: test-mod_1.0.0.zip'
         );
