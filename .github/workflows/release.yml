@@ -43,7 +43,7 @@ jobs:
         uses: phips28/gh-action-bump-version@master
         with:
           tag-prefix: ''
-          commit-message: 'chore(release): {{version}} [skip ci]'
+          commit-message: 'chore(release): bumped to {{version}} [skip ci]'
           push: true
           skip-commit:  'true'
       
