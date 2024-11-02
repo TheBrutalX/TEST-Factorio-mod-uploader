@@ -4,6 +4,10 @@ on:
   push:
     branches: [ main ]
 
+env:
+  NODE_VERSION: 20.x
+  BOT_APPID: 1044190
+
 jobs:
   tests:
     runs-on: ubuntu-latest
@@ -13,7 +17,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20.x'
+          node-version: ${{ env.NODE_VERSION }}
 
       - name: Install dependencies
         run: npm install
@@ -25,12 +29,22 @@ jobs:
     needs: tests
     runs-on: ubuntu-latest
     steps:
+
+      - uses: actions/create-github-app-token@v1
+        id: app-token
+        with:
+          app-id: ${{ env.BOT_APPID }}
+          private-key: ${{ secrets.BOT_TOKEN }}
+
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ steps.app-token.outputs.token }}
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20.x'
+          node-version: ${{ env.NODE_VERSION }}
 
       - name: Install dependencies
         run: npm install
@@ -52,10 +66,13 @@ jobs:
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git config --global url."https://x-access-token:${GITHUB_TOKEN}@github.com/".insteadOf "https://github.com/"
           git add -f dist/
           git add package.json package-lock.json
           git commit --allow-empty -m 'chore(release): Added bundle.js [skip ci]'
           git push
+        env:
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
      
   release:
     needs: build
