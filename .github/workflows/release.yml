@@ -45,6 +45,7 @@ jobs:
           tag-prefix: ''
           commit-message: 'chore(release): bumped to {{version}} [skip ci]'
           push: true
+          skip-tag:  'true'
           skip-commit:  'true'
       
       - name: Add dist folder to repo
