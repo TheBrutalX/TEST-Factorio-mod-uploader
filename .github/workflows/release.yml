@@ -31,8 +31,8 @@ jobs:
       - name: Create GitHub Release
         uses: actions/create-release@v1
         with:
-          tag_name: ${{ steps.bump.outputs.version }}
-          release_name: Release ${{ steps.bump.outputs.version }}
+          tag_name: ${{ steps.bump.outputs.newTag  }}
+          release_name: Release ${{ steps.bump.outputs.newTag  }}
           draft: false
           prerelease: false
         env:
