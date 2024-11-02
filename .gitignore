@@ -1,4 +1,6 @@
-.env
+# Dependency directory
 node_modules
-test.ts
-tmp
+# Distribution directory
+dist
+# Environment
+.env
