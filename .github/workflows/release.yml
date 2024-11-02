@@ -9,6 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Ensure all tags are fetched
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -23,14 +25,14 @@ jobs:
         uses: phips28/gh-action-bump-version@v10.0.0
         with:
           tag-prefix: ''
-          commit-message: 'chore(release): ${{steps.bump.outputs.new_version}} [skip ci]'
+          commit-message: 'chore(release): ${{ steps.bump.outputs.version }} [skip ci]'
           push: true
 
       - name: Create GitHub Release
         uses: actions/create-release@v1
         with:
-          tag_name: ${{ steps.bump.outputs.new_version }}
-          release_name: Release ${{ steps.bump.outputs.new_version }}
+          tag_name: ${{ steps.bump.outputs.version }}
+          release_name: Release ${{ steps.bump.outputs.version }}
           draft: false
           prerelease: false
         env:
