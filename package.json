@@ -1,10 +1,10 @@
 {
   "name": "factiorio-release-action",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Automated process for automatic release factorio mod",
   "main": "dist/bundle.js",
   "scripts": {
-    "build": "npm run pretty && npm run test && webpack",
+    "build": "webpack",
     "start": "node dist/bundle.js",
     "test": "jest",
     "run": "npm run build && npm start",
