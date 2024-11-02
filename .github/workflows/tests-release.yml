@@ -5,6 +5,7 @@ on:
     branches: [ main ]
 jobs:
   tests:
+    name: Test for release
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
