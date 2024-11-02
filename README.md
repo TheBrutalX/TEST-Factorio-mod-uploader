@@ -1,4 +1,4 @@
-[![Release](https://github.com/TheBrutalX/factorio-mod-uploader-action/actions/workflows/release.yml/badge.svg?branch=main)](https://github.com/TheBrutalX/factorio-mod-uploader-action/actions/workflows/release.yml) [![Tests](https://github.com/TheBrutalX/factorio-mod-uploader-action/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/TheBrutalX/factorio-mod-uploader-action/actions/workflows/tests.yml) [![CodeQL](https://github.com/TheBrutalX/factorio-mod-uploader-action/actions/workflows/github-code-scanning/codeql/badge.svg?branch=main)](https://github.com/TheBrutalX/factorio-mod-uploader-action/actions/workflows/github-code-scanning/codeql)
+[![Release](https://github.com/TheBrutalX/factorio-mod-uploader-action/actions/workflows/release.yml/badge.svg?branch=main)](https://github.com/TheBrutalX/factorio-mod-uploader-action/actions/workflows/release.yml) [![CodeQL](https://github.com/TheBrutalX/factorio-mod-uploader-action/actions/workflows/github-code-scanning/codeql/badge.svg?branch=main)](https://github.com/TheBrutalX/factorio-mod-uploader-action/actions/workflows/github-code-scanning/codeql)
 
 # Factorio Mod Uploader Action
 
@@ -29,17 +29,17 @@ jobs:
                   node-version: '20'
 
             - name: Validate Mod
-              uses: TheBrutalX/factorio-mod-uploader-action@0.0.16
+              uses: TheBrutalX/factorio-mod-uploader-action
               with:
                   action: validate
 
             - name: Create zip
-              uses: TheBrutalX/factorio-mod-uploader-action@0.0.16
+              uses: TheBrutalX/factorio-mod-uploader-action
               with:
                   action: compress
 
             - name: Upload Mod
-              uses: TheBrutalX/factorio-mod-uploader-action@0.0.16
+              uses: TheBrutalX/factorio-mod-uploader-action
               with:
                   action: upload
                   factorio-api-key: ${{ secrets.FACTORIO_API_KEY }}
@@ -63,17 +63,17 @@ The `Validate Mod` step ensures that the `info.json` file in your mod directory 
 
 If all checks pass, it exports the mod name, version, and folder as environment variables for subsequent steps.
 
-> **Input Parameters**
-> | Name | Description | Required | From Enviroment | Default |
-> |------------|------------------------------|----------|----------|------------------------|
-> | `MOD-FOLDER` | Path to the mod folder (specify if not root of project) | false | false | `GITHUB_WORKSPACE` |
+**Input Parameters**
+| Name | Description | Required | From Enviroment | Default |
+|------------|------------------------------|----------|----------|------------------------|
+| `MOD-FOLDER` | Path to the mod folder (specify if not root of project) | false | false | `GITHUB_WORKSPACE` |
 
-> **Output Variables**
-> | Name | Description |
-> |-------------|------------------------------|
-> | `MOD_NAME` | The name of the mod |
-> | `MOD_VERSION` | The version of the mod |
-> | `MOD_FOLDER` | The path to the mod folder |
+**Output Variables**
+| Name | Description |
+|-------------|------------------------------|
+| `MOD_NAME` | The name of the mod |
+| `MOD_VERSION` | The version of the mod |
+| `MOD_FOLDER` | The path to the mod folder |
 
 ### Create zip
 
@@ -85,17 +85,17 @@ The `Create zip` step packages your mod directory into a zip file. This is usefu
 -   Compresses the mod directory into a zip file.
 -   Exports the path to the created zip file as an environment variable.
 
-> **Input Parameters** > _If parameter not set from user the value was set from Enviroment_
-> | Name | Description | Required | From Enviroment | Default |
-> |------------|------------------------------|----------|----------|------------------------|
-> | `MOD-NAME` | The name of the mod | false | true | |
-> | `MOD-FOLDER` | Path to the mod folder | false | true | |
-> | `MOD-VERSION`| The version of the mod | false | true | |
+**Input Parameters** > _If parameter not set from user the value was set from Enviroment_
+| Name | Description | Required | From Enviroment | Default |
+|------------|------------------------------|----------|----------|------------------------|
+| `MOD-NAME` | The name of the mod | false | true | |
+| `MOD-FOLDER` | Path to the mod folder | false | true | |
+| `MOD-VERSION`| The version of the mod | false | true | |
 
-> **Output Variables**
-> | Name | Description |
-> |-------------|------------------------------|
-> | `ZIP_FILE` | The path to the created zip file |
+**Output Variables**
+| Name | Description |
+|-------------|------------------------------|
+| `ZIP_FILE` | The path to the created zip file |
 
 ### Upload Mod
 
@@ -106,14 +106,14 @@ The `Upload Mod` step uploads the created zip file to the Factorio Mod Portal. I
 -   Uploads the zip file to the retrieved URL.
 -   Confirms the successful upload of the mod.
 
-> **Input Parameters** > _If parameter not set from user the value was set from Environment_
-> | Name | Description | Required | From Environment | Default |
-> |------------------|------------------------------|----------|------------------|------------------------|
-> | `MOD-NAME` | The name of the mod | false | true | |
-> | `ZIP-FILE` | The path to the zip file | false | true | |
-> | `FACTORIO-API-KEY` | The API key for Factorio | true | false | |
+**Input Parameters** > _If parameter not set from user the value was set from Environment_
+| Name | Description | Required | From Environment | Default |
+|------------------|------------------------------|----------|------------------|------------------------|
+| `MOD-NAME` | The name of the mod | false | true | |
+| `ZIP-FILE` | The path to the zip file | false | true | |
+| `FACTORIO-API-KEY` | The API key for Factorio | true | false | |
 
-> **Output Variables**
-> | Name | Description |
-> |-------------|------------------------------|
-> | `UPLOAD_URL`| The URL used for uploading the mod |
+**Output Variables**
+| Name | Description |
+|-------------|------------------------------|
+| `UPLOAD_URL`| The URL used for uploading the mod |
