@@ -1,9 +1,7 @@
-name: Tests
+name: Tests All
 
 on:
-  pull_request:
-    branches: [ main ]
-  push:
+  push: 
     branches-ignore: [ main ]
 
 jobs:

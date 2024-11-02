@@ -1,4 +1,4 @@
-[![Release](https://github.com/TheBrutalX/factorio-mod-uploader-action/actions/workflows/release.yml/badge.svg?branch=main)](https://github.com/TheBrutalX/factorio-mod-uploader-action/actions/workflows/release.yml) [![Tests](https://github.com/TheBrutalX/factorio-mod-uploader-action/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/TheBrutalX/factorio-mod-uploader-action/actions/workflows/tests.yml) [![CodeQL](https://github.com/TheBrutalX/factorio-mod-uploader-action/actions/workflows/github-code-scanning/codeql/badge.svg?branch=main)](https://github.com/TheBrutalX/factorio-mod-uploader-action/actions/workflows/github-code-scanning/codeql)
+[![Release](https://github.com/TheBrutalX/factorio-mod-uploader-action/actions/workflows/release.yml/badge.svg?branch=main)](https://github.com/TheBrutalX/factorio-mod-uploader-action/actions/workflows/release.yml) [![CodeQL](https://github.com/TheBrutalX/factorio-mod-uploader-action/actions/workflows/github-code-scanning/codeql/badge.svg?branch=main)](https://github.com/TheBrutalX/factorio-mod-uploader-action/actions/workflows/github-code-scanning/codeql)
 
 # Factorio Mod Uploader Action
 
