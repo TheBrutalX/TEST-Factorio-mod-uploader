@@ -22,12 +22,7 @@ jobs:
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-
-          git tag -d latest || true
-          git push origin :refs/tags/latest || true
-          
-          # Create new latest tag
-          git tag -fa latest
-          git push origin latest --force
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Tag latest commit
+        run: git tag -f latest
+      - name: Push latest tag
+        run: git push origin latest --force
