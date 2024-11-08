@@ -1,5 +1,6 @@
 name: Update Main Version
 run-name: Move ${{ github.event.inputs.major_version }} to ${{ github.event.inputs.target }}
+
 on:
   workflow_dispatch:
     inputs:
@@ -12,21 +13,34 @@ on:
         options:
           - v1
           - v2
+
+env:
+  BOT_APPID: 1044190
+
 jobs:
   tag:
     runs-on: ubuntu-latest
     steps:
-    # Note this update workflow can also be used as a rollback tool.
-    # For that reason, it's best to pin `actions/checkout` to a known, stable version
-    # (typically, about two releases back).
-    - uses: actions/checkout@v4.1.6
+    - uses: actions/checkout@v4
       with:
         fetch-depth: 0
+    
+    - uses: actions/create-github-app-token@v1
+      id: app-token
+      with:
+        app-id: ${{ env.BOT_APPID }}
+        private-key: ${{ secrets.BOT_TOKEN }}
+  
     - name: Git config
       run: |
-        git config user.name "github-actions[bot]"
-        git config user.email "github-actions[bot]@users.noreply.github.com"
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        git config --global url."https://x-access-token:${GITHUB_TOKEN}@github.com/".insteadOf "https://github.com/"
+      env:
+        GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+
     - name: Tag new target
       run: git tag -f ${{ github.event.inputs.major_version }} ${{ github.event.inputs.target }}
+
     - name: Push new tag
       run: git push origin ${{ github.event.inputs.major_version }} --force
