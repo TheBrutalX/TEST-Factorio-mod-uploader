@@ -29,17 +29,17 @@ jobs:
                   node-version: '20'
 
             - name: Validate Mod
-              uses: TheBrutalX/factorio-mod-uploader-action
+              uses: TheBrutalX/factorio-mod-uploader-action@v1
               with:
                   action: validate
 
             - name: Create zip
-              uses: TheBrutalX/factorio-mod-uploader-action
+              uses: TheBrutalX/factorio-mod-uploader-action@v1
               with:
                   action: compress
 
             - name: Upload Mod
-              uses: TheBrutalX/factorio-mod-uploader-action
+              uses: TheBrutalX/factorio-mod-uploader-action@v1
               with:
                   action: upload
                   factorio-api-key: ${{ secrets.FACTORIO_API_KEY }}
