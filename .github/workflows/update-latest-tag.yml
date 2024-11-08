@@ -1,4 +1,5 @@
 name: Update Latest Tag
+run-name: Update latest tag
 
 on:
   workflow_run:
@@ -7,6 +8,9 @@ on:
       - completed
     branches:
       - main
+
+env:
+  BOT_APPID: 1044190
 
 jobs:
   update-latest-tag:
@@ -18,11 +22,22 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Update latest tag
+      - uses: actions/create-github-app-token@v1
+        id: app-token
+        with:
+          app-id: ${{ env.BOT_APPID }}
+          private-key: ${{ secrets.BOT_TOKEN }}
+
+      - name: Git config
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git config --global url."https://x-access-token:${GITHUB_TOKEN}@github.com/".insteadOf "https://github.com/"
+        env:
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+      
       - name: Tag latest commit
         run: git tag -f latest
+      
       - name: Push latest tag
         run: git push origin latest --force
