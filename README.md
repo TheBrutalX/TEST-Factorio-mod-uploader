@@ -23,11 +23,6 @@ jobs:
             - name: Checkout Repository
               uses: actions/checkout@v4
 
-            - name: Set up Node.js
-              uses: actions/setup-node@v3
-              with:
-                  node-version: '20'
-
             - name: Validate Mod
               uses: TheBrutalX/factorio-mod-uploader-action@v1
               with:
