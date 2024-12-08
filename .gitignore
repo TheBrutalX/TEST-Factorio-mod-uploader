@@ -4,3 +4,7 @@ node_modules
 dist
 # Environment
 .env
+# Test file
+/src/dev.ts
+# Visual Studio Code
+.vscode

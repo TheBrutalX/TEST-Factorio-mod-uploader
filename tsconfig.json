@@ -1,13 +1,24 @@
 // tsconfig.json
 {
   "compilerOptions": {
-    "target": "ES6",
-    "module": "commonjs",
+    "target": "ES2020",
+    "module": "CommonJS",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "outDir": "./dist",
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": "./src",
+    "paths": {
+      "@/*": ["./*"],
+      "@errors/*": ["./errors/*"],
+      "@interfaces/*": ["./interfaces/*"],
+      "@services/*": ["./services/*"],
+      "@types/*": ["./types/*"],
+    }
   },
-  "include": ["src"]
+  "include": ["src"],
+  "ts-node": {
+    "esm": true
+  }
 }
