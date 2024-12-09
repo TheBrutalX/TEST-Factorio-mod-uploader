@@ -40,9 +40,9 @@ export default class ValidateProcess extends BaseProcess {
         if (!(await this.checkOnlineVersion(info.name, info.version)))
             throw new Error('Mod already exists on the mod portal with the same version');
 
-        this.exportVariable('MOD_NAME', info.name);
-        this.exportVariable('MOD_VERSION', info.version);
-        this.exportVariable('MOD_FOLDER', this.modPath);
+        this.exportVariable('MOD-NAME', info.name);
+        this.exportVariable('MOD-VERSION', info.version);
+        this.exportVariable('MOD-FOLDER', this.modPath);
     }
 
     private async checkOnlineVersion(
