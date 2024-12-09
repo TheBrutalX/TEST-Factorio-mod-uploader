@@ -1,6 +1,7 @@
 import * as core from '@actions/core';
 import { zipDirectory } from '../utils/zipper';
-import { existsSync, promises as fs } from 'fs';
+import { existsSync } from 'fs';
+import fsp from 'fs/promises';
 import { posix as path } from 'path';
 import BaseProcess from './baseProcess';
 import { FactorioIgnoreParser } from '@/utils/FactorioIgnoreParser';
@@ -16,7 +17,7 @@ export default class CompressProcess extends BaseProcess {
         this.modPath = this.getInput('MOD-FOLDER');
         this.modVersion = this.getInput('MOD-VERSION');
         this.tmpPath = process.env.RUNNER_TEMP || '';
-        if (!this.tmpPath) throw new Error('RUNNER_TEMP is required');
+        if (!this.tmpPath) throw new Error('RUNNER-TEMP is required');
         this.dotignorefile = this.getInput('DOTIGNORE-FILE', false, undefined);
         if (!this.dotignorefile) {
             this.debug('No DOTIGNORE-FILE specified, using default .factorioignore');
@@ -32,7 +33,7 @@ export default class CompressProcess extends BaseProcess {
             core.warning(`For this action use the default .factorioignore file directive`);
             core.warning(`For more information visit the WIKI`);
         } else {
-            dotignoreContent = await fs.readFile(dotignorePath, 'utf8');
+            dotignoreContent = await fsp.readFile(dotignorePath, 'utf8');
         }
         const zipName = this.normalizedZipName();
         core.info(`Creating zip file: ${zipName}`);
@@ -40,22 +41,22 @@ export default class CompressProcess extends BaseProcess {
         const modDir = path.normalize(path.join(zipDir, this.modName));
         if(existsSync(modDir)){
             core.warning(`The directory ${modDir} already exists, deleting it`);
-            await fs.rm(modDir, { recursive: true });
+            await fsp.rm(modDir, { recursive: true });
         }
         const fip = new FactorioIgnoreParser(dotignoreContent);
         fip.getPatterns().forEach(p => core.info(`Pattern: ${p.pattern}`));
         await fip.copyNonIgnoredFiles(this.modPath, modDir, {
-            readdir: fs.readdir,
-            mkdir: fs.mkdir,
-            copyFile: fs.copyFile,
-            stat: fs.stat,
+            readdir: fsp.readdir,
+            mkdir: fsp.mkdir,
+            copyFile: fsp.copyFile,
+            stat: fsp.stat,
             normalize: path.normalize
         });
         const zipPath = path.normalize(`${this.tmpPath}/${zipName}`);
         const absolutePath = await zipDirectory(zipDir, zipPath);
-        await fs.rm(zipDir, { recursive: true });
+        await fsp.rm(zipDir, { recursive: true });
         this.info(`Zip file created: ${absolutePath}`);
-        this.exportVariable('ZIP_FILE', absolutePath);
+        this.exportVariable('ZIP-FILE', absolutePath);
     }
 
     private normalizedZipName(): string {

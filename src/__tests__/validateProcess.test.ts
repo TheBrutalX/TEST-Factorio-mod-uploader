@@ -106,15 +106,15 @@ describe('ValidateProcess', () => {
         expect(core.info).toHaveBeenCalledWith('Mod version: 1.0.1');
         expect(core.debug).toHaveBeenCalledWith('info.json is valid');
         expect(core.exportVariable).toHaveBeenCalledWith(
-            'MOD_NAME',
+            'MOD-NAME',
             'test-mod'
         );
         expect(core.exportVariable).toHaveBeenCalledWith(
-            'MOD_VERSION',
+            'MOD-VERSION',
             '1.0.1'
         );
         expect(core.exportVariable).toHaveBeenCalledWith(
-            'MOD_FOLDER',
+            'MOD-FOLDER',
             expect.any(String)
         );
     });
