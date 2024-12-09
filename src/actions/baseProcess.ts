@@ -10,7 +10,7 @@ export default abstract class BaseProcess implements IBaseProcess {
     protected getInput(
         name: string,
         required: boolean = true,
-        inputOption: InputOptions = {}
+        inputOption: InputOptions = {},
     ): string {
         // Get the input value from env if exists
         // For env, the name is uppercased and '-' is replaced with '_'
@@ -21,6 +21,9 @@ export default abstract class BaseProcess implements IBaseProcess {
         // If the value is required and not provided, throw an error
         if (required && !envValue && !userValue) {
             throw new Error(`Input required and not supplied: ${name}`);
+        }
+        if(!required && !envValue && !userValue) {
+            core.debug(`Input not required and not supplied: ${name}`);
         }
         // if user value is provided, return it
         if (userValue) return userValue;

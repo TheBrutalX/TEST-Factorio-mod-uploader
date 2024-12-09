@@ -4,6 +4,8 @@ node_modules
 dist
 # Environment
 .env
+# Tmp directory
+.tmp
 # Test file
 /src/dev.ts
 # Visual Studio Code
