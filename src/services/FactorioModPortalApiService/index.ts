@@ -7,9 +7,6 @@ import { FactorioErrorResponse, FinishUploadResponse, InitPublishResponse, InitU
 import { IModInfoCreate } from '@/interfaces/IModInfoCreate';
 
 const modApiUrl = 'https://mods.factorio.com/api';
-const axiosInstance = axios.create({
-    timeout: 1000,
-});
 
 export default class FactorioModPortalApiService {
     //#region Internal API
@@ -17,11 +14,13 @@ export default class FactorioModPortalApiService {
     public static async CheckIfModIsPublished(name: string): Promise<boolean> {
         try {
             const url = `${modApiUrl}/mods/${name}`;
-            await axiosInstance.get<ModInfo>(url);
-            return true;
+            const result = await axios.get<ModInfo>(url);
+            if(result.data.name === name) return true;
+            return false;
         } catch (error) {
             if (error instanceof AxiosError) {
-                if (error.response?.status === 404) return false;
+                if (error.response?.status === 404 || error.code == '404') return false;
+                throw new fmpe.FactorioModPortalApiError('Unknown error', error.stack);
             }
             throw new Error(`Error fetching mod info: ${error}`);
         }
@@ -30,22 +29,19 @@ export default class FactorioModPortalApiService {
     public static async getLatestModVersion(name: string): Promise<string | undefined> {
         try {
             const url = `${modApiUrl}/mods/${name}`;
-            const response = await axiosInstance.get<ModInfo>(url);
+            const response = await axios.get<ModInfo>(url);
             const modInfo = response.data;
-            if (modInfo.releases && modInfo.releases.length > 0) {
-                const latestRelease = modInfo.releases.reduce(
-                    (latest, release) => {
-                        return new Date(release.released_at) >
-                            new Date(latest.released_at)
-                            ? release
-                            : latest;
-                    },
-                    modInfo.releases[0]
-                );
-                return latestRelease.version;
-            } else {
-                throw new Error('No releases found for the mod.');
-            }
+            if(!modInfo.releases) throw new fmpe.FactorioModPortalApiModNotFoundError();
+            const latestRelease = modInfo.releases.reduce(
+                (latest, release) => {
+                    return new Date(release.released_at) >
+                        new Date(latest.released_at)
+                        ? release
+                        : latest;
+                },
+                modInfo.releases[0]
+            );
+            return latestRelease.version;
         } catch (error) {
             // If error is 404, the mod does not exist, check if error is axiosError
             if(error instanceof AxiosError) {
@@ -200,10 +196,11 @@ export default class FactorioModPortalApiService {
 
     //#endregion    
 
-    private static HandleFactorioModPortalApiError(e: AxiosError): void {
+    static HandleFactorioModPortalApiError(e: AxiosError): void {
         if(e.response === undefined) throw new fmpe.FactorioModPortalApiError('Unknown error', e.stack);
+        if(e.code === 'ECONNREFUSED') throw new fmpe.FactorioModPortalApiError('Connection refused', e.stack);
+        if(e.response.status === 500) throw new fmpe.FactorioModPortalApiInternalError(e.stack);
         if(!e.response.data) throw new fmpe.FactorioModPortalApiError('Unknown error', e.stack);
-        
         const errorResponse = e.response.data as FactorioErrorResponse;
         if (!errorResponse.error) throw new fmpe.FactorioModPortalApiError('Missing error on body', e.stack);
         switch (errorResponse.error) {

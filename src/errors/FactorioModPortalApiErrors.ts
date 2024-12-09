@@ -1,7 +1,7 @@
 export class FactorioModPortalApiError extends Error {
     constructor(message: string, stack?: string) {
         super(message);
-        this.name = 'UnhandeledError';
+        this.name = 'UnhandledError';
         if (stack) this.stack = stack;
     }
 }

@@ -1,4 +1,3 @@
-import * as core from '@actions/core';
 import path from 'path';
 import semver from 'semver';
 import fs from 'fs';
@@ -17,7 +16,7 @@ export default class ValidateProcess extends BaseProcess {
     async run(): Promise<void> {
         const infoPath = path.join(this.modPath, 'info.json');
         if (!fs.existsSync(infoPath)) throw new Error('info.json not found');
-        core.debug('info.json path: ' + infoPath);
+        this.debug('info.json path: ' + infoPath);
         const infoRaw = await readFile(infoPath, 'utf8');
         const info = JSON.parse(infoRaw);
 
@@ -34,26 +33,24 @@ export default class ValidateProcess extends BaseProcess {
         // Check if the mod version is a valid semver version
         if (!this.isValidVersion(info.version))
             throw new Error('Invalid version in info.json');
-        core.info(`Mod name: ${info.name}`);
-        core.info(`Mod version: ${info.version}`);
-        core.debug('info.json is valid');
+        this.info(`Mod name: ${info.name}`);
+        this.info(`Mod version: ${info.version}`);
+        this.debug('info.json is valid');
 
         if (!(await this.checkOnlineVersion(info.name, info.version)))
-            throw new Error(
-                'Mod already exists on the mod portal with the same version'
-            );
+            throw new Error('Mod already exists on the mod portal with the same version');
 
-        core.exportVariable('MOD_NAME', info.name);
-        core.exportVariable('MOD_VERSION', info.version);
-        core.exportVariable('MOD_FOLDER', this.modPath);
+        this.exportVariable('MOD_NAME', info.name);
+        this.exportVariable('MOD_VERSION', info.version);
+        this.exportVariable('MOD_FOLDER', this.modPath);
     }
 
     private async checkOnlineVersion(
         name: string,
         version: string
     ): Promise<boolean> {
-        const latestVersion =
-            await FactorioModPortalApiService.getLatestModVersion(name);
+        const latestVersion = await FactorioModPortalApiService.getLatestModVersion(name);
+        if (!latestVersion) return true;
         return semver.gt(version, latestVersion);
     }
 

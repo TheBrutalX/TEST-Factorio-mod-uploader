@@ -2,6 +2,7 @@ import * as core from '@actions/core';
 import { mkdir, cp, rm } from 'fs/promises';
 import CompressProcess from '../actions/compress';
 import { zipDirectory } from '../utils/zipper';
+import { posix as path } from 'path';
 
 jest.mock('@actions/core');
 jest.mock('fs/promises');
@@ -82,20 +83,20 @@ describe('CompressProcess', () => {
         );
 
         compressProcess.parseInputs();
-        (compressProcess as any)['tmpPath'] = '/tmp'; // Override tmpPath
+        (compressProcess as any)['tmpPath'] = path.normalize('/tmp'); // Override tmpPath
         await compressProcess.run();
 
-        expect(mkdir).toHaveBeenCalledWith('/tmp/zip/test-mod', {
+        expect(mkdir).toHaveBeenCalledWith(path.normalize('/tmp/zip/test-mod'), {
             recursive: true,
         });
-        expect(cp).toHaveBeenCalledWith('/folder', '/tmp/zip/test-mod', {
+        expect(cp).toHaveBeenCalledWith(path.normalize('/folder'), path.normalize('/tmp/zip/test-mod'), {
             recursive: true,
         });
         expect(zipDirectory).toHaveBeenCalledWith(
-            '/tmp/zip',
-            '/tmp/test-mod_1.0.0.zip'
+            path.normalize('/tmp/zip'),
+            path.normalize('/tmp/test-mod_1.0.0.zip')
         );
-        expect(rm).toHaveBeenCalledWith('/tmp/zip', { recursive: true });
+        expect(rm).toHaveBeenCalledWith(path.normalize('/tmp/zip'), { recursive: true });
         expect(core.info).toHaveBeenCalledWith(
             'Creating zip file: test-mod_1.0.0.zip'
         );

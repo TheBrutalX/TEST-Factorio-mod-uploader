@@ -1,3 +1,4 @@
+import * as core from '@actions/core';
 import { IBaseProcess } from '../interfaces/IBaseProcess';
 import { getInput, InputOptions } from '@actions/core';
 
@@ -24,5 +25,29 @@ export default abstract class BaseProcess implements IBaseProcess {
         // if user value is provided, return it
         if (userValue) return userValue;
         else return envValue!;
+    }
+
+    protected debug(message: string): void {
+        core.debug(message);
+    }
+
+    protected info(message: string): void {
+        core.info(message);
+    }
+
+    protected warning(message: string): void {
+        core.warning(message);
+    }
+
+    protected error(message: string): void {
+        core.error(message);
+    }
+
+    protected exportVariable(name: string, value: string): void {
+        core.exportVariable(name, value);
+    }
+
+    protected setFailed(message: string): void {
+        core.setFailed(message);
     }
 }

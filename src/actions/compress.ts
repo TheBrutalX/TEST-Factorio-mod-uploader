@@ -1,7 +1,7 @@
 import * as core from '@actions/core';
 import { zipDirectory } from '../utils/zipper';
 import { cp, mkdir, rm } from 'fs/promises';
-import { join } from 'path';
+import { posix as path } from 'path';
 import BaseProcess from './baseProcess';
 export default class CompressProcess extends BaseProcess {
     private modName: string = '';
@@ -20,11 +20,11 @@ export default class CompressProcess extends BaseProcess {
     async run(): Promise<void> {
         const zipName = this.normalizedZipName();
         core.info(`Creating zip file: ${zipName}`);
-        const zipDir = join(this.tmpPath, 'zip');
-        const modDir = join(zipDir, this.modName);
+        const zipDir = path.normalize(path.join(this.tmpPath, 'zip'));
+        const modDir = path.normalize(path.join(zipDir, this.modName));
         await mkdir(modDir, { recursive: true });
         await cp(this.modPath, modDir, { recursive: true });
-        const zipPath = `${this.tmpPath}/${zipName}`;
+        const zipPath = path.normalize(`${this.tmpPath}/${zipName}`);
         const absolutePath = await zipDirectory(zipDir, zipPath);
         rm(zipDir, { recursive: true });
         core.info(`Zip file created: ${absolutePath}`);
