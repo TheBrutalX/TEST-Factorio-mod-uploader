@@ -59,12 +59,9 @@ export class FactorioIgnoreParser {
             if (existingRule.isDirectory) {
                 this.patterns[this.patterns.indexOf(existingRule)] = newRule;
             } else {
-                // If the new rule is a directory rule, ignore it
-                if (!newRule.isDirectory) {
-                    // If the existing rule is negated, replace it
-                    if (existingRule.negated) {
-                        this.patterns[this.patterns.indexOf(existingRule)] = newRule;
-                    }
+                // If the existing rule is negated, replace it
+                if (!existingRule.negated) {
+                    this.patterns[this.patterns.indexOf(existingRule)] = newRule;
                 }
             }
             return;

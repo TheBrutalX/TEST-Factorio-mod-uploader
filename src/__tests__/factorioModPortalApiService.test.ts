@@ -1,120 +1,121 @@
+import { IModInfo } from '@/interfaces/IFactorioModInfo';
+import * as fmpe from '@errors/FactorioModPortalApiErrors';
+import FactorioModPortalApiService from '@services/FactorioModPortalApiService';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 
 jest.mock('axios');
-jest.mock('form-data');
-jest.mock('fs');
+const mockedAxios = axios as jest.Mocked<typeof axios>;
 
-// describe('FactorioModPortalApiService', () => {
-//     beforeEach(() => {
-//         jest.clearAllMocks();
-//     });
+describe('FactorioModPortalApiService', () => {
+    beforeEach(() => {
+        jest.clearAllMocks();
+    });
 
-//     describe('CheckIfModIsPublished', () => {
-//         it('should return true if mod exists', async () => {
-//             const mockResponse = { data: { name: 'test-mod' } };
-//             (axios.get as jest.Mock).mockReturnValue(mockResponse);
-//             const result = await FactorioModPortalApiService.CheckIfModIsPublished('test-mod');
-//             expect(result).toBe(true);
-//         });
+    describe('CheckIfModIsPublished', () => {
+        it('should return true if mod exists', async () => {
+            mockedAxios.get.mockResolvedValueOnce({ data: { name: 'test-mod' } });
+            const result = await FactorioModPortalApiService.CheckIfModIsPublished('test-mod');
+            expect(result).toBe(true);
+        });
 
-//         it('should return false if mod does not exist', async () => {
-//             const response = { status: 404 } as AxiosResponse<ModInfo>;
-//             const mockResponse: AxiosError = new AxiosError();
-//             mockResponse.response = response;
+        it('should return false if mod does not exist', async () => {
+            const response = { data: { error: 'UnknownMod' }, status: 404, statusText: 'Not Found' } as AxiosResponse;
+            const error = new AxiosError();
+            error.response = response
+            mockedAxios.get.mockRejectedValueOnce(error);
+            const result = await FactorioModPortalApiService.CheckIfModIsPublished('test-mod');
+            expect(result).toBe(false);
+        });
+    });
 
-//             axios.get = jest.fn().mockRejectedValue(mockResponse);
-//             const result = await FactorioModPortalApiService.CheckIfModIsPublished('test-mod');
-//             expect(result).toBe(false);
-//         });
-//     });
+    describe('getLatestModVersion', () => {
+        it('should return latest version', async () => {
+            mockedAxios.get.mockResolvedValueOnce({
+                data: {
+                    releases: [
+                        { version: '1.0.0', released_at: '2023-01-01' },
+                        { version: '1.0.1', released_at: '2023-01-02' }
+                    ]
+                }
+            });
+            const result = await FactorioModPortalApiService.getLatestModVersion('test-mod');
+            expect(result).toBe('1.0.1');
+        });
 
-//     describe('getLatestModVersion', () => {
-//         it('should return latest version', async () => {
-//             const mockResponse = {
-//                 data: {
-//                     releases: [
-//                         { version: '1.0.0', released_at: '2023-01-01' },
-//                         { version: '1.0.1', released_at: '2023-01-02' }
-//                     ]
-//                 }
-//             };
+        it('should throw ModNotFoundError if mod does not exist', async () => {
+            const response = { status: 404 } as AxiosResponse;
+            const error = new AxiosError();
+            error.response = response;
+            mockedAxios.get.mockRejectedValueOnce(error);
+            await expect(FactorioModPortalApiService.getLatestModVersion('test-mod'))
+                .rejects.toThrow(fmpe.FactorioModPortalApiModNotFoundError);
+        });
+    });
 
-//             (axios.get as jest.Mock).mockReturnValue(mockResponse);
+    describe('ModUploadInit', () => {
+        it('should return upload url', async () => {
+            mockedAxios.post.mockResolvedValueOnce({ data: { upload_url: 'test-url' } });
+            const result = await FactorioModPortalApiService.ModUploadInit('token', 'test-mod');
+            expect(result).toBe('test-url');
+        });
 
-//             const result = await FactorioModPortalApiService.getLatestModVersion('test-mod');
-//             expect(result).toBe('1.0.1');
-//         });
+        it('should throw InvalidApiTokenError on invalid token', async () => {
+            const response = { data: { error: 'InvalidApiKey' } } as AxiosResponse;
+            const error = new AxiosError();
+            error.response = response;
+            mockedAxios.post.mockRejectedValueOnce(error);
+            await expect(FactorioModPortalApiService.ModUploadInit('invalid-token', 'test-mod'))
+                .rejects.toThrow(fmpe.FactorioModPortalApiInvalidApiTokenError);
+        });
+    });
 
-//         it('should throw ModNotFoundError if mod does not exist', async () => {
-//             const response = { status: 404 } as AxiosResponse<ModInfo>;
-//             const mockResponse: AxiosError = new AxiosError();
-//             mockResponse.response = response;
-//             axios.get = jest.fn().mockRejectedValue(mockResponse);
+    describe('ModPublishInit', () => {
+        it('should return upload url', async () => {
+            mockedAxios.post.mockResolvedValueOnce({ data: { upload_url: 'test-url' } });
+            const result = await FactorioModPortalApiService.ModPublishInit('token', 'test-mod');
+            expect(result).toBe('test-url');
+        });
+    });
 
-//             await expect(FactorioModPortalApiService.getLatestModVersion('test-mod'))
-//                 .rejects.toThrow(fmpe.FactorioModPortalApiModNotFoundError);
-//         });
-//     });
+    describe('ModUpdateDetails', () => {
+        it('should update mod details successfully', async () => {
+            mockedAxios.post.mockResolvedValueOnce({ data: { success: true } });
+            const modInfo: IModInfo = {
+                title: 'Test Mod',
+                description: 'Test Description',
+                tags: ['manufacturing']
+            };
+            await expect(FactorioModPortalApiService.ModUpdateDetails('token', 'test-mod', modInfo))
+                .resolves.not.toThrow();
+        });
 
-//     describe('ModUploadInit', () => {
-//         it('should return upload url', async () => {
-//             const mockResponse = { data: { upload_url: 'https://test.com/upload' } };
-//             (axios.post as jest.Mock).mockResolvedValue(mockResponse);
+        it('should throw error on update failure', async () => {
+            mockedAxios.post.mockResolvedValueOnce({ data: { success: false, message: 'Update failed' } });
+            const modInfo: IModInfo = {};
+            await expect(FactorioModPortalApiService.ModUpdateDetails('token', 'test-mod', modInfo))
+                .rejects.toThrow('Failed to update mod details: Update failed');
+        });
+    });
 
-//             const result = await FactorioModPortalApiService.ModUploadInit('token', 'test-mod');
-//             expect(result).toBe('https://test.com/upload');
-//         });
-//     });
+    describe('HandleFactorioModPortalApiError', () => {
+        const testCases = [
+            { error: 'InvalidApiKey', expectedError: fmpe.FactorioModPortalApiInvalidApiTokenError },
+            { error: 'InvalidRequest', expectedError: fmpe.FactorioModPortalApiInvalidRequestError },
+            { error: 'InternalError', expectedError: fmpe.FactorioModPortalApiInternalError },
+            { error: 'Forbidden', expectedError: fmpe.FactorioModPortalApiForbiddenError },
+            { error: 'UnknownMod', expectedError: fmpe.FactorioModPortalApiModNotFoundError },
+            { error: 'Unknown', expectedError: fmpe.FactorioModPortalApiUnknownError }
+        ];
 
-//     describe('ModUploadFinish', () => {
-//         it('should successfully upload mod', async () => {
-//             const mockResponse = { data: { success: true } };
-//             (axios.post as jest.Mock).mockResolvedValue(mockResponse);
-
-//             await expect(FactorioModPortalApiService.ModUploadFinish(
-//                 'token',
-//                 'https://test.com/upload',
-//                 'test-mod.zip'
-//             )).resolves.not.toThrow();
-//         });
-//     });
-
-//     describe('Error handling', () => {
-//         it('should preserve stack trace in custom errors', () => {
-//             const originalStack = 'Error: test\n    at Test.stack';
-//             const error = new fmpe.FactorioModPortalApiError('Test error', originalStack);
-//             expect(error.stack).toBe(originalStack);
-//         });
-
-//         it('should handle invalid API token error', async () => {
-//             const response = { status: 401, data: { error: 'InvalidApiKey' } } as AxiosResponse;
-//             const mockError: AxiosError = new AxiosError();
-//             mockError.response = response;
-//             mockError.stack = 'Error: unauthorized\n    at Test.stack';
-//             axios.post = jest.fn().mockRejectedValue(mockError);
-//             await expect(FactorioModPortalApiService.ModUploadInit('invalid-token', 'test-mod'))
-//                 .rejects.toThrow(fmpe.FactorioModPortalApiInvalidApiTokenError);
-//         });
-
-//         it('should handle forbidden error', async () => {
-//             const response = { status: 403, data: { error: 'Forbidden' } } as AxiosResponse;
-//             const mockError: AxiosError = new AxiosError();
-//             mockError.response = response;
-            
-//             axios.post = jest.fn().mockRejectedValue(mockError);
-
-//             await expect(FactorioModPortalApiService.ModUploadInit('token', 'test-mod'))
-//                 .rejects.toThrow(fmpe.FactorioModPortalApiForbiddenError);
-//         });
-
-//         it('should handle internal server error', async () => {
-//             const response = { status: 500 } as AxiosResponse;
-//             const mockError: AxiosError = new AxiosError();
-//             mockError.response = response;
-            
-//             axios.post = jest.fn().mockRejectedValue(mockError);
-
-//             await expect(FactorioModPortalApiService.ModUploadInit('token', 'test-mod'))
-//                 .rejects.toThrow(fmpe.FactorioModPortalApiInternalError);
-//         });
-//     });
-// });
+        testCases.forEach(({ error, expectedError }) => {
+            it(`should throw ${expectedError.name} for ${error}`, () => {
+                const axiosError: any = {
+                    response: { data: { error } },
+                    stack: 'error stack'
+                };
+                expect(() => FactorioModPortalApiService.HandleFactorioModPortalApiError(axiosError))
+                    .toThrow(expectedError);
+            });
+        });
+    });
+});

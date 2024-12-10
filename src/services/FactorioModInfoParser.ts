@@ -1,6 +1,6 @@
 import { IModInfo } from "@/interfaces/IFactorioModInfo";
 import { ValidateFactorioCategory, ValidateFactorioLicense, ValidateFactorioTags } from "@/types/FactorioTypes";
-import { error } from "@actions/core";
+import { error, warning } from "@actions/core";
 import { existsSync } from "fs";
 import { readFile } from "fs/promises";
 import { load } from 'js-yaml';
@@ -109,7 +109,8 @@ export class FactorioModInfoParser {
     * Parse the description file if it exists
     */
     private async parseDescription(): Promise<void> {
-        if (!this.yamlContent.mod_info?.description_file) this.modInfo.description = undefined;
+        if (!this.yamlContent.mod_info?.description_file)
+            return this.modInfo.description = undefined;
         try {
             const descriptionFile = this.yamlContent.mod_info?.description_file;
             if (descriptionFile) {
@@ -126,7 +127,8 @@ export class FactorioModInfoParser {
     * Parse the title field
     */
     private async parseSummary(): Promise<void> {
-        if (!this.yamlContent.mod_info?.summary) this.modInfo.summary = undefined;
+        if (!this.yamlContent.mod_info?.summary)
+            return this.modInfo.summary = undefined;
         const summary = this.yamlContent.mod_info?.summary;
         this.modInfo.summary = summary;
     }
@@ -135,7 +137,8 @@ export class FactorioModInfoParser {
     * Parse the title field
     */
     private async parseTitle(): Promise<void> {
-        if (!this.yamlContent.mod_info?.title) this.modInfo.title = undefined;
+        if (!this.yamlContent.mod_info?.title)
+            return this.modInfo.title = undefined;
         const title = this.yamlContent.mod_info?.title;
         this.modInfo.title = title;
     }
@@ -145,14 +148,17 @@ export class FactorioModInfoParser {
     */
 
     private async parseSourceLink(): Promise<void> {
-        if (!this.yamlContent.mod_info?.attach_source_link) this.modInfo.sourceLink = undefined;
+        if (!this.yamlContent.mod_info?.attach_source_link)
+            return this.modInfo.sourceLink = undefined;
         const githubRepo = process.env.GITHUB_REPOSITORY;
         const githubServerUrl = process.env.GITHUB_SERVER_URL;
         if (!githubRepo) {
-            throw new Error('GITHUB_REPOSITORY is not set');
+            warning('GITHUB_REPOSITORY is not set');
+            return this.modInfo.sourceLink = undefined;
         }
         if (!githubServerUrl) {
-            throw new Error('GITHUB_SERVER_URL is not set');
+            warning('GITHUB_SERVER_URL is not set');
+            return this.modInfo.sourceLink = undefined;
         }
         this.modInfo.sourceLink = `${githubServerUrl}/${githubRepo}`;
     }
@@ -161,7 +167,8 @@ export class FactorioModInfoParser {
     * Parse the license field
     */
     private async parseLicense(): Promise<void> {
-        if (!this.yamlContent.mod_info?.license) this.modInfo.license = undefined;
+        if (!this.yamlContent.mod_info?.license)
+            return this.modInfo.license = undefined;
         const license = this.yamlContent.mod_info?.license;
         this.modInfo.license = ValidateFactorioLicense(license);
     }
@@ -170,7 +177,8 @@ export class FactorioModInfoParser {
     * Parse the category field
     */
     private async parseCategory(): Promise<void> {
-        if (!this.yamlContent.mod_info?.category) this.modInfo.category = undefined;
+        if (!this.yamlContent.mod_info?.category)
+            return this.modInfo.category = undefined;
         this.modInfo.category = ValidateFactorioCategory(this.yamlContent.mod_info?.category!);
     }
 
@@ -178,7 +186,10 @@ export class FactorioModInfoParser {
     * Parse the tags field
     */
     private async parseTags(): Promise<void> {
-        if (!this.yamlContent.mod_info?.tags) this.modInfo.tags = [];
+        if (!this.yamlContent.mod_info?.tags) {
+            this.modInfo.tags = [];
+            return;
+        }
         const tags = this.yamlContent.mod_info?.tags;
         this.modInfo.tags = ValidateFactorioTags(tags)
     }
