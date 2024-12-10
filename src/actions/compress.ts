@@ -5,7 +5,7 @@ import fsp from 'fs/promises';
 import { posix as path } from 'path';
 import BaseProcess from './baseProcess';
 import { FactorioIgnoreParser } from '@/utils/FactorioIgnoreParser';
-import { INPUT_DOTIGNORE_FILE, INPUT_MOD_FOLDER, INPUT_MOD_NAME, INPUT_MOD_VERSION } from '@/constants';
+import { FACTORIOIGNORE_FILE_NAME, INPUT_DOTIGNORE_FILE, INPUT_MOD_FOLDER, INPUT_MOD_NAME, INPUT_MOD_VERSION } from '@/constants';
 export default class CompressProcess extends BaseProcess {
     private modName: string = '';
     private modPath: string = '';
@@ -21,8 +21,8 @@ export default class CompressProcess extends BaseProcess {
         if (!this.tmpPath) throw new Error('RUNNER-TEMP is required');
         this.dotignorefile = this.getInput(INPUT_DOTIGNORE_FILE, false, undefined);
         if (!this.dotignorefile) {
-            this.debug('No DOTIGNORE-FILE specified, using default .factorioignore');
-            this.dotignorefile = '.factorioignore';
+            this.debug(`No DOTIGNORE-FILE specified, using default ${FACTORIOIGNORE_FILE_NAME}`);
+            this.dotignorefile = FACTORIOIGNORE_FILE_NAME;
         }
     }
     async run(): Promise<void> {
@@ -31,7 +31,7 @@ export default class CompressProcess extends BaseProcess {
         if(!existsSync(dotignorePath)){
             core.warning(`No ${this.dotignorefile} found, skipping compression`);
             core.warning(`Please create a ${this.dotignorefile} file to specify which files to ignore`);
-            core.warning(`For this action use the default .factorioignore file directive`);
+            core.warning(`For this action use the default ${FACTORIOIGNORE_FILE_NAME} file directive`);
             core.warning(`For more information visit the WIKI`);
         } else {
             dotignoreContent = await fsp.readFile(dotignorePath, 'utf8');
