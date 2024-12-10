@@ -1,9 +1,8 @@
 import path from 'path';
-import semver from 'semver';
 import fs from 'fs';
-import FactorioModPortalApiService from '../services/FactorioModPortalApiService';
 import { readFile } from 'fs/promises';
 import BaseProcess from './baseProcess';
+import ActionHelper from '@/utils/ActionHelper';
 
 export default class ValidateProcess extends BaseProcess {
     private modPath: string = '';
@@ -31,31 +30,26 @@ export default class ValidateProcess extends BaseProcess {
             throw new Error('Invalid mod name in info.json');
 
         // Check if the mod version is a valid semver version
-        if (!this.isValidVersion(info.version))
+        if (!ActionHelper.isValidVersion(info.version))
             throw new Error('Invalid version in info.json');
         this.info(`Mod name: ${info.name}`);
         this.info(`Mod version: ${info.version}`);
         this.debug('info.json is valid');
-
-        if (!(await this.checkOnlineVersion(info.name, info.version)))
-            throw new Error('Mod already exists on the mod portal with the same version');
+        
+        this.exportVariable('MOD-FOLDER', this.modPath);
+        
+        const alreadyExist = await ActionHelper.checkModOnPortal(info.name);
+        // IF the mod is already on the portal, we don't need to create it on the upload phase
+        const needCreate = !alreadyExist;
+        this.exportVariable('CREATE-ON-PORTAL', needCreate.toString());
+        if(alreadyExist) {
+            const needUpdate = await ActionHelper.checkModVersion(info.name, info.version);
+            if(!needUpdate) { 
+                throw new Error(`Mod '${info.name}' version '${info.version}' is already on the portal`);
+            }
+        }
 
         this.exportVariable('MOD-NAME', info.name);
         this.exportVariable('MOD-VERSION', info.version);
-        this.exportVariable('MOD-FOLDER', this.modPath);
-    }
-
-    private async checkOnlineVersion(
-        name: string,
-        version: string
-    ): Promise<boolean> {
-        const latestVersion = await FactorioModPortalApiService.getLatestModVersion(name);
-        if (!latestVersion) return true;
-        return semver.gt(version, latestVersion);
-    }
-
-    private isValidVersion(version: string) {
-        // Check if the version is a valid semver version
-        return semver.valid(version) !== null;
     }
 }

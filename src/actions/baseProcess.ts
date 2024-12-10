@@ -1,4 +1,4 @@
-import * as core from '@actions/core';
+import { debug, info, warning, error, exportVariable, setFailed } from '@actions/core';
 import { IBaseProcess } from '../interfaces/IBaseProcess';
 import { getInput, InputOptions } from '@actions/core';
 
@@ -23,34 +23,49 @@ export default abstract class BaseProcess implements IBaseProcess {
             throw new Error(`Input required and not supplied: ${name}`);
         }
         if(!required && !envValue && !userValue) {
-            core.debug(`Input not required and not supplied: ${name}`);
+            debug(`Input not required and not supplied: ${name}`);
         }
         // if user value is provided, return it
         if (userValue) return userValue;
         else return envValue!;
     }
 
+    protected getInputBoolen(
+        name: string,
+        defaultVal: boolean,
+        required: boolean = true,
+        inputOption: InputOptions = {}
+    ): boolean {
+        const value = this.getInput(name, required, inputOption);
+        if(!value) return defaultVal;
+        // Check if valid boolean value
+        if (value.toLowerCase() !== 'true' && value.toLowerCase() !== 'false') {
+            throw new Error(`Invalid boolean value: ${name}`);
+        }
+        return value.toLowerCase() === 'true';
+    }
+
     protected debug(message: string): void {
-        core.debug(message);
+        return debug(message);
     }
 
     protected info(message: string): void {
-        core.info(message);
+        return info(message);
     }
 
     protected warning(message: string): void {
-        core.warning(message);
+        return warning(message);
     }
 
     protected error(message: string): void {
-        core.error(message);
+        return error(message);
     }
 
     protected exportVariable(name: string, value: string): void {
-        core.exportVariable(name, value);
+        return exportVariable(name, value);
     }
 
     protected setFailed(message: string): void {
-        core.setFailed(message);
+        return setFailed(message);
     }
 }
