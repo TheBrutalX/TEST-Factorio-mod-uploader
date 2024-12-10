@@ -1,8 +1,9 @@
+import { INPUT_MOD_FOLDER, INPUT_MOD_NAME, PROCESS_MOD_VERSION } from '@/constants';
+import ActionHelper from '@/utils/ActionHelper';
 import * as core from '@actions/core';
 import fs from 'fs';
 import ValidateProcess from '../actions/validate';
 import FactorioModPortalApiService from '../services/FactorioModPortalApiService';
-import ActionHelper from '@/utils/ActionHelper';
 
 jest.mock('@actions/core');
 jest.mock('@services/FactorioModPortalApiService');
@@ -113,15 +114,15 @@ describe('ValidateProcess', () => {
         expect(core.info).toHaveBeenCalledWith('Mod version: 1.0.1');
         expect(core.debug).toHaveBeenCalledWith('info.json is valid');
         expect(core.exportVariable).toHaveBeenCalledWith(
-            'MOD-NAME',
+            INPUT_MOD_NAME,
             'test-mod'
         );
         expect(core.exportVariable).toHaveBeenCalledWith(
-            'MOD-VERSION',
+            PROCESS_MOD_VERSION,
             '1.0.1'
         );
         expect(core.exportVariable).toHaveBeenCalledWith(
-            'MOD-FOLDER',
+            INPUT_MOD_FOLDER,
             expect.any(String)
         );
     });

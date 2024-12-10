@@ -8,14 +8,14 @@ export class FactorioModPortalApiError extends Error {
 
 export class FactorioModPortalApiInvalidApiTokenError extends FactorioModPortalApiError {
     constructor(stack?: string) {
-        super('Missing or invalid API key for the current endpoint', stack);
+        super('Missing, invalid or API token does not have permission for the current endpoint', stack);
         this.name = 'InvalidApiKey';
     }
 }
 
 export class FactorioModPortalApiPermissionError extends FactorioModPortalApiError {
     constructor(stack?: string) {
-        super('The API token does not have permission to upload mods', stack);
+        super('The API token does not have permission for the current endpoint', stack);
         this.name = 'PermissionError';
     }
 }

@@ -8,5 +8,4 @@ dist
 .tmp
 # Test file
 /src/dev.ts
-# Visual Studio Code
-.vscode
+/src/dev.**.ts

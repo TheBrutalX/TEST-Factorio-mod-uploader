@@ -1,9 +1,9 @@
-import path from 'path';
+import { INPUT_MOD_FOLDER, INPUT_MOD_NAME, PROCESS_CREATE_ON_PORTAL, PROCESS_MOD_VERSION } from '@/constants';
+import ActionHelper from '@/utils/ActionHelper';
 import fs from 'fs';
 import { readFile } from 'fs/promises';
+import path from 'path';
 import BaseProcess from './baseProcess';
-import ActionHelper from '@/utils/ActionHelper';
-import { INPUT_MOD_FOLDER } from '@/constants';
 
 export default class ValidateProcess extends BaseProcess {
     private modPath: string = '';
@@ -36,21 +36,21 @@ export default class ValidateProcess extends BaseProcess {
         this.info(`Mod name: ${info.name}`);
         this.info(`Mod version: ${info.version}`);
         this.debug('info.json is valid');
-        
-        this.exportVariable('MOD-FOLDER', this.modPath);
-        
+
+        this.exportVariable(INPUT_MOD_FOLDER, this.modPath);
+
         const alreadyExist = await ActionHelper.checkModOnPortal(info.name);
         // IF the mod is already on the portal, we don't need to create it on the upload phase
         const needCreate = !alreadyExist;
-        this.exportVariable('CREATE-ON-PORTAL', needCreate.toString());
-        if(alreadyExist) {
+        this.exportVariable(PROCESS_CREATE_ON_PORTAL, needCreate.toString());
+        if (alreadyExist) {
             const needUpdate = await ActionHelper.checkModVersion(info.name, info.version);
-            if(!needUpdate) { 
+            if (!needUpdate) {
                 throw new Error(`Mod '${info.name}' version '${info.version}' is already on the portal`);
             }
         }
 
-        this.exportVariable('MOD-NAME', info.name);
-        this.exportVariable('MOD-VERSION', info.version);
+        this.exportVariable(INPUT_MOD_NAME, info.name);
+        this.exportVariable(PROCESS_MOD_VERSION, info.version);
     }
 }

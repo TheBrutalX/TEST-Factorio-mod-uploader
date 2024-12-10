@@ -5,7 +5,7 @@ export class FactorioIgnoreParser {
     private patterns: Array<IFactorioIgnoreRule> = [];
     constructor(content: string) {
         this.setDefaultPatterns();
-        if(content) {
+        if (content) {
             this.parseContent(content);
         }
     }
@@ -27,12 +27,12 @@ export class FactorioIgnoreParser {
         pattern = isDirectory ? pattern.slice(0, -1) : pattern;
         // Convert the gitignore pattern to a regular expression
         let regexPattern = pattern
-        // Escape special regex characters except * and ?
+            // Escape special regex characters except * and ?
             .replace(/[.+^${}()|[\]\\]/g, '\\$&')
-        // Convert gitignore wildcards to regex wildcards
+            // Convert gitignore wildcards to regex wildcards
             .replace(/\*/g, '.*')
             .replace(/\?/g, '.')
-        // Handle double asterisk for matching across directories
+            // Handle double asterisk for matching across directories
             .replace(/\.\*\.\*/g, '.*');
         // If the pattern doesn't start with /, it can match in any directory
         if (!pattern.startsWith('/')) {
@@ -47,10 +47,10 @@ export class FactorioIgnoreParser {
         // Create the final regex with proper anchors
         const regex = new RegExp(`^${regexPattern}$`);
         const newRule = {
-            pattern : pattern,
-            negated : negated,
-            isDirectory : isDirectory,
-            regex : regex
+            pattern: pattern,
+            negated: negated,
+            isDirectory: isDirectory,
+            regex: regex
         };
         // Check if the pattern already exists
         const existingRule = this.patterns.find(r => r.pattern === newRule.pattern);
@@ -82,7 +82,7 @@ export class FactorioIgnoreParser {
         // Check each pattern in order
         for (const { regex, negated } of this.patterns) {
             if (regex.test(path)) {
-            shouldIgnore = !negated;
+                shouldIgnore = !negated;
             }
         }
         return shouldIgnore;
@@ -115,20 +115,20 @@ export class FactorioIgnoreParser {
         const copiedFiles: string[] = [];
         for (const relativePath of allFiles) {
             const relativePathNormalized = fs.normalize(relativePath);
-          // Skip if the file should be ignored
+            // Skip if the file should be ignored
             if (this.shouldIgnore(relativePathNormalized)) {
                 continue;
             }
-        
+
             const sourceFilePath = `${sourcePath}/${relativePathNormalized}`;
             const sourceFileNormalized = fs.normalize(sourceFilePath);
             const destFilePath = `${destPath}/${relativePathNormalized}`;
             const destFilePathNormalized = fs.normalize(destFilePath);
-        
+
             // Create parent directory if it doesn't exist
             const parentDir = destFilePathNormalized.substring(0, destFilePath.lastIndexOf('/'));
             await fs.mkdir(parentDir, { recursive: true });
-        
+
             // Check if it's a directory
             const stats = await fs.stat(sourceFileNormalized);
             if (!stats.isDirectory()) {
@@ -137,7 +137,7 @@ export class FactorioIgnoreParser {
                 copiedFiles.push(relativePathNormalized);
             }
         }
-    
+
         return copiedFiles;
     }
 

@@ -13,13 +13,13 @@ export interface ModInitResponse extends ModErrorResponse {
     upload_url?: string; // Appears only on successful requests
 }
 
-export interface InitUploadResponse extends ModInitResponse {}
+export interface InitUploadResponse extends ModInitResponse { }
 
 export interface FinishUploadResponse extends ModErrorResponse {
     success?: boolean; // Appears only on successful requests
 }
 
-export interface InitPublishResponse extends ModInitResponse {}
+export interface InitPublishResponse extends ModInitResponse { }
 
 // Main Mod interface
 export interface ModInfo {

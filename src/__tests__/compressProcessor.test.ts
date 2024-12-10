@@ -1,15 +1,16 @@
+import { INPUT_MOD_FOLDER, INPUT_MOD_NAME, PROCESS_MOD_VERSION, PROCESS_ZIP_FILE } from '@/constants';
+import { IFactorioIgnoreRule } from '@/interfaces/IFactorioIgnoreRule';
+import { FactorioIgnoreParser } from '@/services/FactorioIgnoreParser';
 import * as core from '@actions/core';
-import { mkdir, cp, rm } from 'fs/promises';
+import { rm } from 'fs/promises';
+import { posix as path } from 'path';
 import CompressProcess from '../actions/compress';
 import { zipDirectory } from '../utils/zipper';
-import { posix as path } from 'path';
-import { FactorioIgnoreParser } from '@/utils/FactorioIgnoreParser';
-import { IFactorioIgnoreRule } from '@/interfaces/IFactorioIgnoreRule';
 
 jest.mock('@actions/core');
 jest.mock('fs/promises');
 jest.mock('@/utils/zipper');
-jest.mock('@/utils/FactorioIgnoreParser');
+jest.mock('@/services/FactorioIgnoreParser');
 
 describe('CompressProcess', () => {
     let compressProcess: CompressProcess;
@@ -24,11 +25,11 @@ describe('CompressProcess', () => {
         jest.spyOn(compressProcess as any, 'getInput').mockImplementation(
             (name: any) => {
                 switch (name) {
-                    case 'MOD-NAME':
+                    case INPUT_MOD_NAME:
                         return 'test-mod';
-                    case 'MOD-FOLDER':
+                    case INPUT_MOD_FOLDER:
                         return '/folder';
-                    case 'MOD-VERSION':
+                    case PROCESS_MOD_VERSION:
                         return '1.0.0';
                     default:
                         return '';
@@ -57,20 +58,20 @@ describe('CompressProcess', () => {
             'Zip file created: /tmp/test-mod_1.0.0.zip'
         );
         expect(core.exportVariable).toHaveBeenCalledWith(
-            'ZIP-FILE',
+            PROCESS_ZIP_FILE,
             '/tmp/test-mod_1.0.0.zip'
         );
     });
-    
+
     it('should parse inputs correctly', () => {
         jest.spyOn(compressProcess as any, 'getInput').mockImplementation(
             (name: any) => {
                 switch (name) {
-                    case 'MOD-NAME':
+                    case INPUT_MOD_NAME:
                         return 'test-mod';
-                    case 'MOD-FOLDER':
-                        return '/path/to/mod';
-                    case 'MOD-VERSION':
+                    case INPUT_MOD_FOLDER:
+                        return '/folder';
+                    case PROCESS_MOD_VERSION:
                         return '1.0.0';
                     default:
                         return '';
@@ -81,7 +82,7 @@ describe('CompressProcess', () => {
         compressProcess.parseInputs();
 
         expect(compressProcess['modName']).toBe('test-mod');
-        expect(compressProcess['modPath']).toBe('/path/to/mod');
+        expect(compressProcess['modPath']).toBe('/folder');
         expect(compressProcess['modVersion']).toBe('1.0.0');
         expect(compressProcess['tmpPath']).toBe('/tmp');
     });

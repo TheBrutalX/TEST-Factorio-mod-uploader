@@ -1,6 +1,5 @@
-import { debug, info, warning, error, exportVariable, setFailed } from '@actions/core';
+import { debug, error, exportVariable, getInput, info, InputOptions, setFailed, warning } from '@actions/core';
 import { IBaseProcess } from '../interfaces/IBaseProcess';
-import { getInput, InputOptions } from '@actions/core';
 
 export default abstract class BaseProcess implements IBaseProcess {
     abstract parseInputs(): void;
@@ -22,7 +21,7 @@ export default abstract class BaseProcess implements IBaseProcess {
         if (required && !envValue && !userValue) {
             throw new Error(`Input required and not supplied: ${name}`);
         }
-        if(!required && !envValue && !userValue) {
+        if (!required && !envValue && !userValue) {
             debug(`Input not required and not supplied: ${name}`);
         }
         // if user value is provided, return it
@@ -37,7 +36,7 @@ export default abstract class BaseProcess implements IBaseProcess {
         inputOption: InputOptions = {}
     ): boolean {
         const value = this.getInput(name, required, inputOption);
-        if(!value) return defaultVal;
+        if (!value) return defaultVal;
         // Check if valid boolean value
         if (value.toLowerCase() !== 'true' && value.toLowerCase() !== 'false') {
             throw new Error(`Invalid boolean value: ${name}`);
