@@ -2,17 +2,18 @@
 
 # Factorio Mod Uploader - GitHub Action
 
-This repository hosts a GitHub Action specifically designed to simplify and automate the workflow for packaging and uploading Factorio mods to the [Factorio Mod Portal](https://mods.factorio.com/).  
+This repository hosts a GitHub Action specifically designed to simplify and automate the workflow for packaging and uploading Factorio mods to the [Factorio Mod Portal](https://mods.factorio.com/).
 
-### Key Features:  
-- **Version Control Integration**: Checks out the repository to ensure the latest changes are included.  
-- **Dependency Management**: Installs all necessary dependencies for the mod build process.  
-- **Automated Build**: Handles the mod packaging process efficiently.  
-- **Seamless Deployment**: Automatically uploads the packaged mod to the Factorio Mod Portal.  
+### Key Features:
 
-Streamline your mod development process with this action and ensure your updates are delivered faster and with fewer manual steps.  
+- **Version Control Integration**: Checks out the repository to ensure the latest changes are included.
+- **Dependency Management**: Installs all necessary dependencies for the mod build process.
+- **Automated Build**: Handles the mod packaging process efficiently.
+- **Seamless Deployment**: Automatically uploads the packaged mod to the Factorio Mod Portal.
 
-**Perfect for Factorio mod developers looking for a robust and hands-free deployment solution.**  
+Streamline your mod development process with this action and ensure your updates are delivered faster and with fewer manual steps.
+
+**Perfect for Factorio mod developers looking for a robust and hands-free deployment solution.**
 
 ### Workflow Example
 
@@ -49,13 +50,10 @@ jobs:
                   action: upload
                   factorio-api-key: ${{ secrets.FACTORIO_API_KEY }}
 ```
+
 This is the basic version, for the specific option see the detail of each step
 
 If you need to understand the file I have written a guide in the [Wiki](https://github.com/TheBrutalX/Factorio-mod-uploader-action/wiki/WorkFlow-detail)
-
-## Repository Overview
-
-
 
 ## Step overview
 
