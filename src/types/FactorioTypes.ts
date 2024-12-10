@@ -124,8 +124,8 @@ export function ValidateFactorioLicense(license?: string): FactorioModLicenseTyp
         case "gnugplv3":
         case "default_gnugplv3":
             return "default_gnugplv3";
-        case "gplv3":
-        case "gnulgplv3":
+        case "lgplv3":
+        case "lgnulgplv3":
         case "default_gnulgplv3":
             return "default_gnulgplv3";
         case "mozilla2":
