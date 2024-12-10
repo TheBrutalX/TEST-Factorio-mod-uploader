@@ -50,11 +50,11 @@ jobs:
                   action: upload
                   factorio-api-key: ${{ secrets.FACTORIO_API_KEY }}
 ```
+This is the basic version, for the specific option see the detail of each step
 
 This is the basic version, for the specific option see the detail of each step
 
 If you need to understand the file I have written a guide in the [Wiki](https://github.com/TheBrutalX/Factorio-mod-uploader-action/wiki/WorkFlow-detail)
-
 ## Step overview
 
 See all the details of each step in the [Wiki](https://github.com/TheBrutalX/Factorio-mod-uploader-action/wiki/Avaible-Actions)
