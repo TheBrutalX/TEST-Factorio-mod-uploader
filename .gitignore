@@ -1,6 +1,12 @@
 # Dependency directory
-node_modules
+node_modules/
 # Distribution directory
-dist
+dist/
 # Environment
 .env
+# Tmp directory
+.tmp
+# Test file
+/src/dev.ts
+/src/dev.**.ts
+

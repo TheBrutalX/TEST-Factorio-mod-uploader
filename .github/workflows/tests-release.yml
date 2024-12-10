@@ -4,6 +4,7 @@ on:
   pull_request:
     branches: [ main ]
 jobs:
+
   tests:
     name: Test for release
     runs-on: ubuntu-latest

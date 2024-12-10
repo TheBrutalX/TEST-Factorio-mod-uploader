@@ -1,23 +1,22 @@
-import * as core from '@actions/core';
-import path from 'path';
-import semver from 'semver';
+import { INPUT_MOD_FOLDER, INPUT_MOD_NAME, PROCESS_CREATE_ON_PORTAL, PROCESS_MOD_VERSION } from '@/constants';
+import ActionHelper from '@/utils/ActionHelper';
 import fs from 'fs';
-import FactorioModPortalApiService from '../services/FactorioModPortalApiService';
 import { readFile } from 'fs/promises';
+import path from 'path';
 import BaseProcess from './baseProcess';
 
 export default class ValidateProcess extends BaseProcess {
     private modPath: string = '';
 
     parseInputs(): void {
-        this.modPath = this.getInput('MOD-FOLDER', false);
+        this.modPath = this.getInput(INPUT_MOD_FOLDER, false);
         if (!this.modPath) this.modPath = process.env.GITHUB_WORKSPACE!;
     }
 
     async run(): Promise<void> {
         const infoPath = path.join(this.modPath, 'info.json');
         if (!fs.existsSync(infoPath)) throw new Error('info.json not found');
-        core.debug('info.json path: ' + infoPath);
+        this.debug('info.json path: ' + infoPath);
         const infoRaw = await readFile(infoPath, 'utf8');
         const info = JSON.parse(infoRaw);
 
@@ -32,33 +31,26 @@ export default class ValidateProcess extends BaseProcess {
             throw new Error('Invalid mod name in info.json');
 
         // Check if the mod version is a valid semver version
-        if (!this.isValidVersion(info.version))
+        if (!ActionHelper.isValidVersion(info.version))
             throw new Error('Invalid version in info.json');
-        core.info(`Mod name: ${info.name}`);
-        core.info(`Mod version: ${info.version}`);
-        core.debug('info.json is valid');
+        this.info(`Mod name: ${info.name}`);
+        this.info(`Mod version: ${info.version}`);
+        this.debug('info.json is valid');
 
-        if (!(await this.checkOnlineVersion(info.name, info.version)))
-            throw new Error(
-                'Mod already exists on the mod portal with the same version'
-            );
+        this.exportVariable(INPUT_MOD_FOLDER, this.modPath);
 
-        core.exportVariable('MOD_NAME', info.name);
-        core.exportVariable('MOD_VERSION', info.version);
-        core.exportVariable('MOD_FOLDER', this.modPath);
-    }
+        const alreadyExist = await ActionHelper.checkModOnPortal(info.name);
+        // IF the mod is already on the portal, we don't need to create it on the upload phase
+        const needCreate = !alreadyExist;
+        this.exportVariable(PROCESS_CREATE_ON_PORTAL, needCreate.toString());
+        if (alreadyExist) {
+            const needUpdate = await ActionHelper.checkModVersion(info.name, info.version);
+            if (!needUpdate) {
+                throw new Error(`Mod '${info.name}' version '${info.version}' is already on the portal`);
+            }
+        }
 
-    private async checkOnlineVersion(
-        name: string,
-        version: string
-    ): Promise<boolean> {
-        const latestVersion =
-            await FactorioModPortalApiService.getLatestModVersion(name);
-        return semver.gt(version, latestVersion);
-    }
-
-    private isValidVersion(version: string) {
-        // Check if the version is a valid semver version
-        return semver.valid(version) !== null;
+        this.exportVariable(INPUT_MOD_NAME, info.name);
+        this.exportVariable(PROCESS_MOD_VERSION, info.version);
     }
 }

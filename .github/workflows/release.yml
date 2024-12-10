@@ -73,7 +73,7 @@ jobs:
           git push
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
-     
+
   release:
     needs: build
     runs-on: ubuntu-latest

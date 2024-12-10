@@ -1,10 +1,13 @@
+import { INPUT_MOD_FOLDER, INPUT_MOD_NAME, PROCESS_MOD_VERSION } from '@/constants';
+import ActionHelper from '@/utils/ActionHelper';
 import * as core from '@actions/core';
 import fs from 'fs';
 import ValidateProcess from '../actions/validate';
 import FactorioModPortalApiService from '../services/FactorioModPortalApiService';
 
 jest.mock('@actions/core');
-jest.mock('../services/FactorioModPortalApiService');
+jest.mock('@services/FactorioModPortalApiService');
+jest.mock('@/utils/ActionHelper');
 
 describe('ValidateProcess', () => {
     let validateProcess: ValidateProcess;
@@ -81,6 +84,8 @@ describe('ValidateProcess', () => {
     });
 
     it('should throw error if mod already exists with the same version', async () => {
+        jest.spyOn(ActionHelper, 'isValidVersion').mockReturnValue(true);
+        jest.spyOn(ActionHelper, 'checkModOnPortal').mockResolvedValue(true);
         jest.spyOn(fs, 'existsSync').mockReturnValue(true);
         jest.spyOn(fs.promises, 'readFile').mockResolvedValue(
             '{"name": "test-mod", "version": "1.0.0"}'
@@ -89,11 +94,14 @@ describe('ValidateProcess', () => {
             FactorioModPortalApiService.getLatestModVersion as jest.Mock
         ).mockResolvedValue('1.0.0');
         await expect(validateProcess.run()).rejects.toThrow(
-            'Mod already exists on the mod portal with the same version'
+            "Mod 'test-mod' version '1.0.0' is already on the portal"
         );
     });
 
     it('should pass validation with valid info.json', async () => {
+        jest.spyOn(ActionHelper, 'isValidVersion').mockReturnValue(true);
+        jest.spyOn(ActionHelper, 'checkModOnPortal').mockResolvedValue(true);
+        jest.spyOn(ActionHelper, 'checkModVersion').mockResolvedValue(true);
         jest.spyOn(fs, 'existsSync').mockReturnValue(true);
         jest.spyOn(fs.promises, 'readFile').mockResolvedValue(
             '{"name": "test-mod", "version": "1.0.1"}'
@@ -106,15 +114,15 @@ describe('ValidateProcess', () => {
         expect(core.info).toHaveBeenCalledWith('Mod version: 1.0.1');
         expect(core.debug).toHaveBeenCalledWith('info.json is valid');
         expect(core.exportVariable).toHaveBeenCalledWith(
-            'MOD_NAME',
+            INPUT_MOD_NAME,
             'test-mod'
         );
         expect(core.exportVariable).toHaveBeenCalledWith(
-            'MOD_VERSION',
+            PROCESS_MOD_VERSION,
             '1.0.1'
         );
         expect(core.exportVariable).toHaveBeenCalledWith(
-            'MOD_FOLDER',
+            INPUT_MOD_FOLDER,
             expect.any(String)
         );
     });
