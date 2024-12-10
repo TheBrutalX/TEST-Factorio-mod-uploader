@@ -1,3 +1,4 @@
+import { FACTORIOIGNORE_FILE_NAME } from "@/constants";
 import { IFactorioIgnoreRule } from "@/interfaces/IFactorioIgnoreRule";
 
 export class FactorioIgnoreParser {
@@ -142,7 +143,7 @@ export class FactorioIgnoreParser {
 
     public setDefaultPatterns(): void {
         this.clear();
-        this.addPattern('.factorioignore'); // Ignore factorioignore file
+        this.addPattern(FACTORIOIGNORE_FILE_NAME); // Ignore factorioignore file
         this.addPattern('.git/'); // Ignore git directory
         this.addPattern('.github/'); // Ignore github directory
         this.addPattern('.gitignore'); // Ignore gitignore file
