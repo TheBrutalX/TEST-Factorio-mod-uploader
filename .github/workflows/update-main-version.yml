@@ -24,13 +24,13 @@ jobs:
     - uses: actions/checkout@v4
       with:
         fetch-depth: 0
-    
+
     - uses: actions/create-github-app-token@v1
       id: app-token
       with:
         app-id: ${{ env.BOT_APPID }}
         private-key: ${{ secrets.BOT_TOKEN }}
-  
+
     - name: Git config
       run: |
         git config --global user.name 'github-actions[bot]'

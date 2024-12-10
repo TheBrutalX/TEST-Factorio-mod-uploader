@@ -35,7 +35,7 @@ jobs:
           git config --global url."https://x-access-token:${GITHUB_TOKEN}@github.com/".insteadOf "https://github.com/"
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
-      
+
       - name: Tag latest commit
         run: git tag -f latest
       
