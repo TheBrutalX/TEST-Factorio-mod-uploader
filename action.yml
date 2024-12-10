@@ -10,6 +10,7 @@ inputs:
     required: true
   mod-folder:
     description: "Path to the mod folder to upload"
+    default: "."
     required: false
   mod-name:
     description: "Name of the mod to upload"
@@ -19,6 +20,10 @@ inputs:
     required: false
   factorio-api-key:
     description: "API token for authenticating with the Factorio store"
+    required: false
+  dotignore:
+    description: "Path to the .ignore file to use"
+    default: ".factorioignore"
     required: false
   zip-file:
     description: "Path to the zip file to upload"
