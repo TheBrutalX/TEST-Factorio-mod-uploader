@@ -3,12 +3,13 @@ import fs from 'fs';
 import { readFile } from 'fs/promises';
 import BaseProcess from './baseProcess';
 import ActionHelper from '@/utils/ActionHelper';
+import { INPUT_MOD_FOLDER } from '@/constants';
 
 export default class ValidateProcess extends BaseProcess {
     private modPath: string = '';
 
     parseInputs(): void {
-        this.modPath = this.getInput('MOD-FOLDER', false);
+        this.modPath = this.getInput(INPUT_MOD_FOLDER, false);
         if (!this.modPath) this.modPath = process.env.GITHUB_WORKSPACE!;
     }
 

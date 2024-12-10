@@ -3,6 +3,7 @@ import { existsSync } from 'fs';
 import FormData from 'form-data';
 import FactorioModPortalApiService from '../services/FactorioModPortalApiService';
 import BaseProcess from './baseProcess';
+import { INPUT_FACTORIO_API_KEY, INPUT_MOD_NAME, INPUT_ZIP_FILE } from '@/constants';
 
 export default class UploadProcess extends BaseProcess {
     private modName: string = '';
@@ -10,9 +11,9 @@ export default class UploadProcess extends BaseProcess {
     private modApiToken: string = '';
 
     parseInputs(): void {
-        this.modName = this.getInput('MOD-NAME');
-        this.modZipPath = this.getInput('ZIP-FILE');
-        this.modApiToken = this.getInput('FACTORIO-API-KEY');
+        this.modName = this.getInput(INPUT_MOD_NAME);
+        this.modZipPath = this.getInput(INPUT_ZIP_FILE);
+        this.modApiToken = this.getInput(INPUT_FACTORIO_API_KEY);
 
         if (existsSync(this.modZipPath) === false) {
             throw new Error(`File not found: ${this.modZipPath}`);

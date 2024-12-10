@@ -5,6 +5,7 @@ import fsp from 'fs/promises';
 import { posix as path } from 'path';
 import BaseProcess from './baseProcess';
 import { FactorioIgnoreParser } from '@/utils/FactorioIgnoreParser';
+import { INPUT_DOTIGNORE_FILE, INPUT_MOD_FOLDER, INPUT_MOD_NAME, INPUT_MOD_VERSION } from '@/constants';
 export default class CompressProcess extends BaseProcess {
     private modName: string = '';
     private modPath: string = '';
@@ -13,12 +14,12 @@ export default class CompressProcess extends BaseProcess {
     private dotignorefile!: string ;
 
     parseInputs(): void {
-        this.modName = this.getInput('MOD-NAME');
-        this.modPath = this.getInput('MOD-FOLDER');
-        this.modVersion = this.getInput('MOD-VERSION');
+        this.modName = this.getInput(INPUT_MOD_NAME);
+        this.modPath = this.getInput(INPUT_MOD_FOLDER);
+        this.modVersion = this.getInput(INPUT_MOD_VERSION);
         this.tmpPath = process.env.RUNNER_TEMP || '';
         if (!this.tmpPath) throw new Error('RUNNER-TEMP is required');
-        this.dotignorefile = this.getInput('DOTIGNORE-FILE', false, undefined);
+        this.dotignorefile = this.getInput(INPUT_DOTIGNORE_FILE, false, undefined);
         if (!this.dotignorefile) {
             this.debug('No DOTIGNORE-FILE specified, using default .factorioignore');
             this.dotignorefile = '.factorioignore';
