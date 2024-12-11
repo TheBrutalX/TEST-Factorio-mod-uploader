@@ -46,8 +46,10 @@ export default class UploadProcess extends BaseProcess {
     }
 
     private async parseModInfo(): Promise<IModInfo> {
+        this.debug(`Parsing mod info from ${this.modPath}`);
         const modInfoPath = `${this.modPath}/mod_info.yml`;
-        const modInfoInstance = await FactorioModInfoParser.fromFile(modInfoPath);
+        this.debug(`Mod info path: ${modInfoPath}`);
+        const modInfoInstance = await FactorioModInfoParser.fromFile(modInfoPath, this.modPath);
         const isValid = await modInfoInstance.validate();
         if (!isValid) {
             throw new Error(`Mod info is not valid, please check the file`);

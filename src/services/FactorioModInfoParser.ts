@@ -38,7 +38,7 @@ export class FactorioModInfoParser {
                 sourceLink: undefined,
             } as IModInfo;
             if (!modDir) {
-                modDir = path.dirname(process.cwd());
+                modDir = process.env.GITHUB_WORKSPACE || '';
             }
             this.modDir = modDir;
 
@@ -61,6 +61,7 @@ export class FactorioModInfoParser {
     }
 
     public async validate(): Promise<boolean> {
+
         const modInfo = this.yamlContent.mod_info;
         // If there's no mod_info section at all, that's valid (empty config)
         if (!modInfo) return true;
