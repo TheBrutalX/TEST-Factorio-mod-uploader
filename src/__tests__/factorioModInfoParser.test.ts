@@ -3,6 +3,18 @@ import { promises as fs } from 'fs';
 import { tmpdir } from 'os';
 import { join } from 'path';
 
+jest.mock('@actions/core', () => {
+    return {
+        debug: jest.fn(),
+        error: jest.fn(),
+        exportVariable: jest.fn(),
+        getInput: jest.fn(),
+        info: jest.fn(),
+        setFailed: jest.fn(),
+        warning: jest.fn()
+    }
+});
+
 describe('FactorioModInfoParser', () => {
     let tempDir: string;
 

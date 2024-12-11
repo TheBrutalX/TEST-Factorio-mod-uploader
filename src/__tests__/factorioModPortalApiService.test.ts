@@ -4,6 +4,17 @@ import FactorioModPortalApiService from '@services/FactorioModPortalApiService';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 
 jest.mock('axios');
+jest.mock('@actions/core', () => {
+    return {
+        debug: jest.fn(),
+        error: jest.fn(),
+        exportVariable: jest.fn(),
+        getInput: jest.fn(),
+        info: jest.fn(),
+        setFailed: jest.fn(),
+        warning: jest.fn()
+    }
+});
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 
 describe('FactorioModPortalApiService', () => {

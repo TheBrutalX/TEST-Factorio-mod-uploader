@@ -3,7 +3,17 @@ import { INPUT_FACTORIO_API_KEY, INPUT_MOD_FOLDER, INPUT_MOD_NAME, PROCESS_CREAT
 import UploadProcess from '@phases/upload';
 import fs from 'fs';
 
-jest.mock('@actions/core');
+jest.mock('@actions/core', () => {
+    return {
+        debug: jest.fn(),
+        error: jest.fn(),
+        exportVariable: jest.fn(),
+        getInput: jest.fn(),
+        info: jest.fn(),
+        setFailed: jest.fn(),
+        warning: jest.fn()
+    }
+});
 jest.mock('@services/FactorioModPortalApiService');
 
 describe('UploadProcess', () => {
