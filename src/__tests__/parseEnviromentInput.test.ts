@@ -19,18 +19,18 @@ describe('BaseProcess', () => {
     });
 
     test('Using \'-\' as divider for enviroment variable', () => {
-        process.env['INPUT_test-env-key'] = 'test-value';
+        process.env['test-env-key'] = 'test-value';
         phase.parseInputs();
         expect(phase.test).toBe('test-value');
     });
     test('Using \'_\' as divider for enviroment variable', () => {
-        process.env['INPUT_test_env_key'] = 'test-value';
+        process.env['test_env_key'] = 'test-value';
         phase.parseInputs();
         expect(phase.test).toBe('test-value');
     });
 
     test('Using a mixed case as divider for enviroment variable', () => {
-        process.env['INPUT_test-env_key'] = 'test-value';
+        process.env['test-env_key'] = 'test-value';
         phase.parseInputs();
         expect(phase.test).toBe('test-value');
     });
