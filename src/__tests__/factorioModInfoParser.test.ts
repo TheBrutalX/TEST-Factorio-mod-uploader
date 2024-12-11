@@ -85,12 +85,12 @@ describe('FactorioModInfoParser', () => {
         it('should create instance from file', async () => {
             const filePath = join(tempDir, 'mod_info.yml');
             await fs.writeFile(filePath, 'mod_info:\n  title: Test');
-            const parser = await FactorioModInfoParser.fromFile(filePath);
+            const parser = await FactorioModInfoParser.fromFile(filePath, '.');
             expect(parser).toBeInstanceOf(FactorioModInfoParser);
         });
 
         it('should handle non-existent file', async () => {
-            const parser = await FactorioModInfoParser.fromFile('/non/existent/path');
+            const parser = await FactorioModInfoParser.fromFile('/non/existent/path', '.');
             expect(parser).toBeInstanceOf(FactorioModInfoParser);
         });
     });

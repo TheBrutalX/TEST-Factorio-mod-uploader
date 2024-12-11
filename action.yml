@@ -10,7 +10,6 @@ inputs:
     required: true
   mod-folder:
     description: "Path to the mod folder to upload"
-    default: "."
     required: false
   mod-name:
     description: "Name of the mod to upload"
