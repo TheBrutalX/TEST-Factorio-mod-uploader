@@ -7,7 +7,17 @@ import { zipDirectory } from '@utils/zipper';
 import { rm } from 'fs/promises';
 import { posix as path } from 'path';
 
-jest.mock('@actions/core');
+jest.mock('@actions/core', () => {
+    return {
+        debug: jest.fn(),
+        error: jest.fn(),
+        exportVariable: jest.fn(),
+        getInput: jest.fn(),
+        info: jest.fn(),
+        setFailed: jest.fn(),
+        warning: jest.fn()
+    }
+});
 jest.mock('fs/promises');
 jest.mock('@utils/zipper');
 jest.mock('@services/FactorioIgnoreParser');

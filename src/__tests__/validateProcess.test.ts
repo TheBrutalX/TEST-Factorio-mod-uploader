@@ -5,7 +5,17 @@ import FactorioModPortalApiService from '@services/FactorioModPortalApiService';
 import ActionHelper from '@utils/ActionHelper';
 import fs from 'fs';
 
-jest.mock('@actions/core');
+jest.mock('@actions/core', () => {
+    return {
+        debug: jest.fn(),
+        error: jest.fn(),
+        exportVariable: jest.fn(),
+        getInput: jest.fn(),
+        info: jest.fn(),
+        setFailed: jest.fn(),
+        warning: jest.fn()
+    }
+});
 jest.mock('@services/FactorioModPortalApiService');
 jest.mock('@utils/ActionHelper');
 

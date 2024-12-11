@@ -3,7 +3,7 @@ import BaseProcess from "@phases/baseProcess";
 class TestProcess extends BaseProcess {
     public test: string = '';
     parseInputs(): void {
-        this.test = this.getInput('factorio_api_key', true);
+        this.test = this.getInput('test_env_key', true);
     }
 
     async run(): Promise<void> {
@@ -19,18 +19,18 @@ describe('BaseProcess', () => {
     });
 
     test('Using \'-\' as divider for enviroment variable', () => {
-        process.env['INPUT_factorio-api-key'] = 'test-value';
+        process.env['INPUT_test-env-key'] = 'test-value';
         phase.parseInputs();
         expect(phase.test).toBe('test-value');
     });
     test('Using \'_\' as divider for enviroment variable', () => {
-        process.env['INPUT_factorio_api_key'] = 'test-value';
+        process.env['INPUT_test_env_key'] = 'test-value';
         phase.parseInputs();
         expect(phase.test).toBe('test-value');
     });
 
     test('Using a mixed case as divider for enviroment variable', () => {
-        process.env['INPUT_factorio-api_key'] = 'test-value';
+        process.env['INPUT_test-env_key'] = 'test-value';
         phase.parseInputs();
         expect(phase.test).toBe('test-value');
     });

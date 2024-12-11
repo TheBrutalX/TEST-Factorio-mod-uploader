@@ -1,4 +1,15 @@
 import { FactorioIgnoreParser } from '@services/FactorioIgnoreParser';
+jest.mock('@actions/core', () => {
+    return {
+        debug: jest.fn(),
+        error: jest.fn(),
+        exportVariable: jest.fn(),
+        getInput: jest.fn(),
+        info: jest.fn(),
+        setFailed: jest.fn(),
+        warning: jest.fn()
+    }
+});
 
 describe('FactorioIgnoreParser', () => {
     let parser: FactorioIgnoreParser;
