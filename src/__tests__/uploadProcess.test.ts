@@ -1,6 +1,6 @@
-import UploadProcess from '@/actions/upload';
-import { INPUT_FACTORIO_API_KEY, INPUT_MOD_FOLDER, INPUT_MOD_NAME, PROCESS_CREATE_ON_PORTAL, PROCESS_ZIP_FILE } from '@/constants';
 import * as core from '@actions/core';
+import { INPUT_FACTORIO_API_KEY, INPUT_MOD_FOLDER, INPUT_MOD_NAME, PROCESS_CREATE_ON_PORTAL, PROCESS_ZIP_FILE } from '@constants';
+import UploadProcess from '@phases/upload';
 import fs from 'fs';
 
 jest.mock('@actions/core');

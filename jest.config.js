@@ -1,14 +1,16 @@
-export default {
+const { pathsToModuleNameMapper } = require('ts-jest');
+const tsconfig = require('./tsconfig.json');
+
+module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
   testPathIgnorePatterns: ['/node_modules/', '/dist/'],
-  transform: {
-    '^.+\\.ts$': 'ts-jest',
+  "transform": {
+    "node_modules/variables/.+\\.(j|t)sx?$": "ts-jest"
   },
+  "transformIgnorePatterns": [
+    "node_modules/(?!variables/.*)"
+  ],
   moduleFileExtensions: ['ts', 'js'],
-  moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/src/$1',
-    '^@errors/(.*)$': '<rootDir>/src/errors/$1',
-    '^@services/(.*)$': '<rootDir>/src/services/$1',
-  }
+  moduleNameMapper: pathsToModuleNameMapper(tsconfig.compilerOptions.paths, { prefix: '<rootDir>/src' }),
 };

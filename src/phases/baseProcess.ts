@@ -1,5 +1,5 @@
 import { debug, error, exportVariable, getInput, info, InputOptions, setFailed, warning } from '@actions/core';
-import { IBaseProcess } from '../interfaces/IBaseProcess';
+import { IBaseProcess } from '@interfaces/IBaseProcess';
 
 export default abstract class BaseProcess implements IBaseProcess {
     abstract parseInputs(): void;

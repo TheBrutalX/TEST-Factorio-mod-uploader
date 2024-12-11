@@ -1,16 +1,16 @@
-import { INPUT_MOD_FOLDER, INPUT_MOD_NAME, PROCESS_MOD_VERSION, PROCESS_ZIP_FILE } from '@/constants';
-import { IFactorioIgnoreRule } from '@/interfaces/IFactorioIgnoreRule';
-import { FactorioIgnoreParser } from '@/services/FactorioIgnoreParser';
 import * as core from '@actions/core';
+import { INPUT_MOD_FOLDER, INPUT_MOD_NAME, PROCESS_MOD_VERSION, PROCESS_ZIP_FILE } from '@constants';
+import { IFactorioIgnoreRule } from '@interfaces/IFactorioIgnoreRule';
+import CompressProcess from '@phases/compress';
+import { FactorioIgnoreParser } from '@services/FactorioIgnoreParser';
+import { zipDirectory } from '@utils/zipper';
 import { rm } from 'fs/promises';
 import { posix as path } from 'path';
-import CompressProcess from '../actions/compress';
-import { zipDirectory } from '../utils/zipper';
 
 jest.mock('@actions/core');
 jest.mock('fs/promises');
-jest.mock('@/utils/zipper');
-jest.mock('@/services/FactorioIgnoreParser');
+jest.mock('@utils/zipper');
+jest.mock('@services/FactorioIgnoreParser');
 
 describe('CompressProcess', () => {
     let compressProcess: CompressProcess;

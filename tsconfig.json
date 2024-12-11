@@ -1,7 +1,6 @@
-// tsconfig.json
 {
   "compilerOptions": {
-    "target": "ES2020",
+    "target": "ES6",
     "module": "CommonJS",
     "strict": true,
     "esModuleInterop": true,
@@ -11,10 +10,13 @@
     "baseUrl": "./src",
     "paths": {
       "@/*": ["./*"],
+      "@phases/*": ["./phases/*"],
       "@errors/*": ["./errors/*"],
       "@interfaces/*": ["./interfaces/*"],
       "@services/*": ["./services/*"],
       "@types/*": ["./types/*"],
+      "@utils/*": ["./utils/*"],
+      "@constants": ["./constants"]
     }
   },
   "include": ["src"],
