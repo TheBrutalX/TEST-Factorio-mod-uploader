@@ -14,7 +14,7 @@ export default abstract class BaseProcess implements IBaseProcess {
         // Get the input value from env if exists
         // For env, the name is uppercased and '-' is replaced with '_'
         // For example, input name 'mod-name' will be 'MOD_NAME
-        const envName = name.replace(/-/g, '_').toUpperCase();
+        const envName = this.getCorrectEnvName(name);
         const envValue = process.env[envName];
         const userValue = getInput(name, inputOption);
         // If the value is required and not provided, throw an error
@@ -27,6 +27,34 @@ export default abstract class BaseProcess implements IBaseProcess {
         // if user value is provided, return it
         if (userValue) return userValue;
         else return envValue!;
+    }
+
+    private getEnvNameWithHyphen(envName: string): string {
+        return envName.replace(/-/g, '_').toUpperCase();
+    }
+    private getEnvNameWithUnderscore(envName: string): string {
+        return envName.replace(/_/g, '-').toUpperCase();
+    }
+
+    private environmentVariableExists(envName: string): boolean {
+        return Object.keys(process.env).some((key: string) => key.toUpperCase() === envName.toUpperCase());
+    }
+
+    private getCorrectEnvName(envName: string, prefix?: string): string {
+        if (!prefix) prefix = '';
+        const hyphenName = prefix + this.getEnvNameWithHyphen(envName);
+        const underscoreName = prefix + this.getEnvNameWithUnderscore(envName);
+        if (this.environmentVariableExists(hyphenName)) {
+            return hyphenName;
+        } else if (this.environmentVariableExists(underscoreName)) {
+            return underscoreName;
+        } else {
+            if (!prefix) {
+                return this.getCorrectEnvName(envName, 'INPUT_');
+            } else {
+                return ''
+            }
+        }
     }
 
     protected getInputBoolen(
