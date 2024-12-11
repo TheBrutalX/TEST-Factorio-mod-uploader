@@ -1,8 +1,8 @@
-import { INPUT_FACTORIO_API_KEY, INPUT_MOD_FOLDER, INPUT_MOD_NAME, PROCESS_CREATE_ON_PORTAL, PROCESS_ZIP_FILE } from '@/constants';
 import { IModInfo } from '@/interfaces/IFactorioModInfo';
-import { FactorioModInfoParser } from '@/services/FactorioModInfoParser';
+import { INPUT_FACTORIO_API_KEY, INPUT_MOD_FOLDER, INPUT_MOD_NAME, PROCESS_CREATE_ON_PORTAL, PROCESS_ZIP_FILE } from '@constants';
+import { FactorioModInfoParser } from '@services/FactorioModInfoParser';
+import FactorioModPortalApiService from '@services/FactorioModPortalApiService';
 import { existsSync } from 'fs';
-import FactorioModPortalApiService from '../services/FactorioModPortalApiService';
 import BaseProcess from './baseProcess';
 
 export default class UploadProcess extends BaseProcess {

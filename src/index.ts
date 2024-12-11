@@ -1,9 +1,9 @@
 import { getInput, setFailed } from '@actions/core';
 import { IBaseProcess } from './interfaces/IBaseProcess';
 
-import CompressProcess from './actions/compress';
-import UploadProcess from './actions/upload';
-import ValidateProcess from './actions/validate';
+import CompressProcess from '@actions/compress';
+import UploadProcess from '@actions/upload';
+import ValidateProcess from '@actions/validate';
 
 export async function run(): Promise<boolean> {
     try {

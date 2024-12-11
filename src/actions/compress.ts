@@ -1,10 +1,10 @@
-import { FACTORIOIGNORE_FILE_NAME, INPUT_DOTIGNORE_FILE, INPUT_MOD_FOLDER, INPUT_MOD_NAME, PROCESS_MOD_VERSION, PROCESS_ZIP_FILE } from '@/constants';
-import { FactorioIgnoreParser } from '@/services/FactorioIgnoreParser';
 import * as core from '@actions/core';
+import { FACTORIOIGNORE_FILE_NAME, INPUT_DOTIGNORE_FILE, INPUT_MOD_FOLDER, INPUT_MOD_NAME, PROCESS_MOD_VERSION, PROCESS_ZIP_FILE } from '@constants';
+import { FactorioIgnoreParser } from '@services/FactorioIgnoreParser';
+import { zipDirectory } from '@utils/zipper';
 import { existsSync } from 'fs';
 import fsp from 'fs/promises';
 import { posix as path } from 'path';
-import { zipDirectory } from '../utils/zipper';
 import BaseProcess from './baseProcess';
 export default class CompressProcess extends BaseProcess {
     private modName: string = '';
