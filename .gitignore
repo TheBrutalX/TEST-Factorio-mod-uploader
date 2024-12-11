@@ -1,7 +1,5 @@
 # Dependency directory
 node_modules/
-# Distribution directory
-dist/
 # Environment
 .env
 # Tmp directory

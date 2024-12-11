@@ -80,26 +80,32 @@ export default abstract class BaseProcess implements IBaseProcess {
     }
 
     protected debug(message: string): void {
-        return debug(message);
+        debug(message);
+        return;
     }
 
     protected info(message: string): void {
-        return info(message);
+        info(message);
+        return;
     }
 
     protected warning(message: string): void {
-        return warning(message);
+        warning(message);
+        return;
     }
 
     protected error(message: string): void {
-        return error(message);
+        error(message);
+        return;
     }
 
     protected exportVariable(name: string, value: string): void {
-        return exportVariable(name, value);
+        exportVariable(name, value);
+        return;
     }
 
     protected setFailed(message: string): void {
-        return setFailed(message);
+        setFailed(message);
+        return;
     }
 }
