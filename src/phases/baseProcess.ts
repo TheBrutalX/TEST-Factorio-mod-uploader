@@ -14,19 +14,20 @@ export default abstract class BaseProcess implements IBaseProcess {
         // Get the input value from env if exists
         // For env, the name is uppercased and '-' is replaced with '_'
         // For example, input name 'mod-name' will be 'MOD_NAME
-        const envName = this.getCorrectEnvName(name);
-        const envValue = process.env[envName];
-        const userValue = getInput(name, inputOption);
+        const enviromentName = this.getCorrectEnvName(name);
+        const enviromentValue = this.findByKeyInsensitive(enviromentName);
+        if (enviromentValue) return enviromentValue;
+        const userValue = getInput(enviromentName, inputOption);
         // If the value is required and not provided, throw an error
-        if (required && !envValue && !userValue) {
+        if (required && !userValue) {
             throw new Error(`Input required and not supplied: ${name}`);
         }
-        if (!required && !envValue && !userValue) {
+        if (!required && !userValue) {
             debug(`Input not required and not supplied: ${name}`);
         }
         // if user value is provided, return it
         if (userValue) return userValue;
-        else return envValue!;
+        else return '';
     }
 
     private getEnvNameWithHyphen(envName: string): string {
@@ -42,19 +43,25 @@ export default abstract class BaseProcess implements IBaseProcess {
 
     private getCorrectEnvName(envName: string, prefix?: string): string {
         if (!prefix) prefix = '';
-        const hyphenName = prefix + this.getEnvNameWithHyphen(envName);
-        const underscoreName = prefix + this.getEnvNameWithUnderscore(envName);
-        if (this.environmentVariableExists(hyphenName)) {
+        const hyphenName = this.getEnvNameWithHyphen(envName);
+        const hyphenWithPrefix = prefix + hyphenName;
+        const underscoreName = this.getEnvNameWithUnderscore(envName);
+        const underscoreWithPrefix = prefix + underscoreName;
+        if (this.environmentVariableExists(hyphenWithPrefix)) {
             return hyphenName;
-        } else if (this.environmentVariableExists(underscoreName)) {
+        } else if (this.environmentVariableExists(underscoreWithPrefix)) {
             return underscoreName;
         } else {
             if (!prefix) {
                 return this.getCorrectEnvName(envName, 'INPUT_');
             } else {
-                return ''
+                return envName;
             }
         }
+    }
+
+    private findByKeyInsensitive(key: string): string | undefined {
+        return Object.entries(process.env).find(([envKey]) => envKey.toLowerCase() === key.toLowerCase())?.[1];
     }
 
     protected getInputBoolen(
