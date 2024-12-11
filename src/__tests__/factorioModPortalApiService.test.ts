@@ -1,5 +1,5 @@
-import { IModInfo } from '@/interfaces/IFactorioModInfo';
 import * as fmpe from '@errors/FactorioModPortalApiErrors';
+import { IModInfo } from '@interfaces/IFactorioModInfo';
 import FactorioModPortalApiService from '@services/FactorioModPortalApiService';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 

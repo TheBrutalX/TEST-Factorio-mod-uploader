@@ -1,13 +1,13 @@
-import { INPUT_MOD_FOLDER, INPUT_MOD_NAME, PROCESS_MOD_VERSION } from '@/constants';
-import ActionHelper from '@/utils/ActionHelper';
 import * as core from '@actions/core';
+import { INPUT_MOD_FOLDER, INPUT_MOD_NAME, PROCESS_MOD_VERSION } from '@constants';
+import ValidateProcess from '@phases/validate';
+import FactorioModPortalApiService from '@services/FactorioModPortalApiService';
+import ActionHelper from '@utils/ActionHelper';
 import fs from 'fs';
-import ValidateProcess from '../actions/validate';
-import FactorioModPortalApiService from '../services/FactorioModPortalApiService';
 
 jest.mock('@actions/core');
 jest.mock('@services/FactorioModPortalApiService');
-jest.mock('@/utils/ActionHelper');
+jest.mock('@utils/ActionHelper');
 
 describe('ValidateProcess', () => {
     let validateProcess: ValidateProcess;

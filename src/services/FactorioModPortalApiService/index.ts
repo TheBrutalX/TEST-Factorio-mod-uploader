@@ -1,6 +1,6 @@
-import { IModInfo } from '@/interfaces/IFactorioModInfo';
 import { debug } from '@actions/core';
 import * as fmpe from '@errors/FactorioModPortalApiErrors';
+import { IModInfo } from '@interfaces/IFactorioModInfo';
 import axios, { AxiosError } from 'axios';
 import FormData from 'form-data';
 import { createReadStream } from 'fs';

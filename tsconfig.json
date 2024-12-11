@@ -1,4 +1,3 @@
-// tsconfig.json
 {
   "compilerOptions": {
     "target": "ES6",
@@ -11,7 +10,7 @@
     "baseUrl": "./src",
     "paths": {
       "@/*": ["./*"],
-      "@actions/*": ["./actions/*"],
+      "@phases/*": ["./phases/*"],
       "@errors/*": ["./errors/*"],
       "@interfaces/*": ["./interfaces/*"],
       "@services/*": ["./services/*"],

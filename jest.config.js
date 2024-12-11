@@ -1,3 +1,6 @@
+import tsJest from 'ts-jest';
+import tsconfig from './tsconfig.json' with { type: 'json' };
+
 export default {
   preset: 'ts-jest',
   testEnvironment: 'node',
@@ -6,9 +9,5 @@ export default {
     '^.+\\.ts$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'js'],
-  moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/src/$1',
-    '^@errors/(.*)$': '<rootDir>/src/errors/$1',
-    '^@services/(.*)$': '<rootDir>/src/services/$1',
-  }
+  moduleNameMapper: tsJest.pathsToModuleNameMapper(tsconfig.compilerOptions.paths, { prefix: '<rootDir>/src' }),
 };
