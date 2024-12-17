@@ -29,7 +29,7 @@ export default class CompressProcess extends BaseProcess {
         let dotignoreContent = '';
         const dotignorePath = path.normalize(path.join(this.modPath, this.dotignorefile));
         if (!existsSync(dotignorePath)) {
-            core.warning(`No ${this.dotignorefile} found, skipping compression`);
+            core.warning(`No ${this.dotignorefile} found`);
             core.warning(`Please create a ${this.dotignorefile} file to specify which files to ignore`);
             core.warning(`For this action use the default ${FACTORIOIGNORE_FILE_NAME} file directive`);
             core.warning(`For more information visit the WIKI`);
@@ -49,13 +49,7 @@ export default class CompressProcess extends BaseProcess {
         for (const pattern of patters) {
             this.debug(`Pattern: ${pattern.pattern}`);
         }
-        await fip.copyNonIgnoredFiles(this.modPath, modDir, {
-            readdir: fsp.readdir,
-            mkdir: fsp.mkdir,
-            copyFile: fsp.copyFile,
-            stat: fsp.stat,
-            normalize: path.normalize
-        });
+        await fip.copyNonIgnoredFiles(this.modPath, modDir);
         const zipPath = path.normalize(`${this.tmpPath}/${zipName}`);
         const absolutePath = await zipDirectory(zipDir, zipPath);
         await fsp.rm(zipDir, { recursive: true });

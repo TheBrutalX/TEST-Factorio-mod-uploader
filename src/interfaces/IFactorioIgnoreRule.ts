@@ -1,6 +1,5 @@
 export interface IFactorioIgnoreRule {
     pattern: string;
-    negated: boolean;
-    isDirectory: boolean;
+    isNegated: boolean;
     regex: RegExp;
 }
