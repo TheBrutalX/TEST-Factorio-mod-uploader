@@ -49,13 +49,7 @@ export default class CompressProcess extends BaseProcess {
         for (const pattern of patters) {
             this.debug(`Pattern: ${pattern.pattern}`);
         }
-        await fip.copyNonIgnoredFiles(this.modPath, modDir, {
-            readdir: fsp.readdir,
-            mkdir: fsp.mkdir,
-            copyFile: fsp.copyFile,
-            stat: fsp.stat,
-            normalize: path.normalize
-        });
+        await fip.copyNonIgnoredFiles(this.modPath, modDir);
         const zipPath = path.normalize(`${this.tmpPath}/${zipName}`);
         const absolutePath = await zipDirectory(zipDir, zipPath);
         await fsp.rm(zipDir, { recursive: true });
