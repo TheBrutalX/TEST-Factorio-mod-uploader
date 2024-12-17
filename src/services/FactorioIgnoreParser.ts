@@ -1,6 +1,7 @@
 import { warning } from "@actions/core";
 import { FACTORIOIGNORE_FILE_NAME } from "@constants";
 import { IFactorioIgnoreRule } from "@interfaces/IFactorioIgnoreRule";
+import { debug } from "console";
 import { promises as fs } from "fs";
 import { join } from "path/posix";
 
@@ -197,15 +198,22 @@ export class FactorioIgnoreParser {
         await fs.mkdir(destination, { recursive: true });
         for (const file of files) {
             const filePath = join(source, file);
+            debug(`Processing file ${file} (${source}) to ${destination}`);
             const destinationPath = join(destination, file);
             const stats = await fs.stat(filePath);
             if (stats.isDirectory()) {
                 const copied = await this.copyNonIgnoredFilesRecursive(filePath, destinationPath);
                 copiedFiles.push(...copied);
-            } else if (!this.shouldIgnore(filePath)) {
-                await fs.copyFile(filePath, destinationPath);
-                copiedFiles.push(filePath);
+            } else {
+                if (!this.shouldIgnore(filePath)) {
+                    await fs.copyFile(filePath, destinationPath);
+                    copiedFiles.push(filePath);
+                    debug(`Copied file ${file} to ${destinationPath}`);
+                } else {
+                    debug(`Ignoring file ${file}`);
+                }
             }
+
         }
         return copiedFiles;
     }
