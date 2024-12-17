@@ -1,103 +1,91 @@
 name: Release
 
 on:
-  push:
-    branches: [ main ]
+    push:
+        branches: [main]
 
 env:
-  NODE_VERSION: 20.x
-  BOT_APPID: 1044190
+    NODE_VERSION: 20.x
+    BOT_APPID: 1044190
 
 jobs:
-  tests:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+    tests:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
+            - name: Set up Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ env.NODE_VERSION }}
 
-      - name: Install dependencies
-        run: npm install
+            - name: Install dependencies
+              run: npm install
 
-      - name: Run tests
-        run: npm test
+            - name: Run tests
+              run: npm test
 
-  build: 
-    needs: tests
-    runs-on: ubuntu-latest
-    steps:
+    build:
+        needs: tests
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/create-github-app-token@v1
+              id: app-token
+              with:
+                  app-id: ${{ env.BOT_APPID }}
+                  private-key: ${{ secrets.BOT_TOKEN }}
 
-      - uses: actions/create-github-app-token@v1
-        id: app-token
-        with:
-          app-id: ${{ env.BOT_APPID }}
-          private-key: ${{ secrets.BOT_TOKEN }}
+            - uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+                  token: ${{ steps.app-token.outputs.token }}
 
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          token: ${{ steps.app-token.outputs.token }}
+            - name: Set up Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ env.NODE_VERSION }}
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
+            - name: Install dependencies
+              run: npm install
 
-      - name: Install dependencies
-        run: npm install
+            - name: Build
+              run: npm run build
 
-      - name: Build
-        run: npm run build
+            - name: Add dist folder to repo
+              run: |
+                  git config --global user.name 'github-actions[bot]'
+                  git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+                  git config --global url."https://x-access-token:${GITHUB_TOKEN}@github.com/".insteadOf "https://github.com/"
+                  git add -f dist/
+                  git add package.json package-lock.json
+                  git commit --allow-empty -m 'chore(release): Added bundle.js [skip ci]'
+                  git push
+              env:
+                  GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
 
-      - name: Bump version
-        id: bump
-        uses: phips28/gh-action-bump-version@master
-        with:
-          tag-prefix: ''
-          commit-message: 'chore(release): bumped to {{version}} [skip ci]'
-          push: true
-          skip-tag:  'true'
-          skip-commit:  'true'
-      
-      - name: Add dist folder to repo
-        run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git config --global url."https://x-access-token:${GITHUB_TOKEN}@github.com/".insteadOf "https://github.com/"
-          git add -f dist/
-          git add package.json package-lock.json
-          git commit --allow-empty -m 'chore(release): Added bundle.js [skip ci]'
-          git push
-        env:
-          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+    release:
+        needs: build
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
 
-  release:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
+            - name: Set up Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '20.x'
 
-      - uses: actions/checkout@v4 
-        with:
-          fetch-depth: 0
+            - name: Get current package version
+              id: package-version
+              uses: martinbeentjes/npm-get-version-action@v1.3.1
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20.x'
-
-      - name: Get current package version
-        id: package-version
-        uses: martinbeentjes/npm-get-version-action@v1.3.1
-
-      - name: Create GitHub Release
-        uses: actions/create-release@v1
-        with:
-          tag_name: ${{ steps.package-version.outputs.current-version}}
-          release_name: Release ${{ steps.package-version.outputs.current-version}}
-          draft: false
-          prerelease: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            - name: Create GitHub Release
+              uses: actions/create-release@v1
+              with:
+                  tag_name: ${{ steps.package-version.outputs.current-version}}
+                  release_name: Release ${{ steps.package-version.outputs.current-version}}
+                  draft: false
+                  prerelease: false
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
