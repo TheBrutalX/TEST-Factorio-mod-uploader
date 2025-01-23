@@ -323,15 +323,15 @@ describe('FactorioIgnoreParser', () => {
             }
         });
 
-        it('should handle empty directories', async () => {
-            fs.readdir = jest.fn().mockResolvedValue([]);
+        it('should not create empty directories', async () => {
+            fs.readdir = jest.fn().mockResolvedValue(['file1.txt']);
             fs.mkdir = jest.fn().mockResolvedValue(undefined);
 
-            parser = new FactorioIgnoreParser('', false);
+            parser = new FactorioIgnoreParser('*.txt', false);
             const copiedFiles = await parser.copyNonIgnoredFiles('src', 'dest');
 
             expect(copiedFiles).toHaveLength(0);
-            expect(fs.mkdir).toHaveBeenCalledTimes(1);
+            expect(fs.mkdir).toHaveBeenCalledTimes(0);
         });
     });
 
