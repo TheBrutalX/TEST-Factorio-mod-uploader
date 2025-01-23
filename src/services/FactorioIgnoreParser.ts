@@ -195,7 +195,7 @@ export class FactorioIgnoreParser {
     ): Promise<string[]> {
         const copiedFiles: string[] = new Array();
         const files = await fs.readdir(source);
-        await fs.mkdir(destination, { recursive: true });
+        let destinationDirCreated = false;
         for (const file of files) {
             const filePath = join(source, file);
             debug(`Processing file ${file} (${source}) to ${destination}`);
@@ -206,6 +206,10 @@ export class FactorioIgnoreParser {
                 copiedFiles.push(...copied);
             } else {
                 if (!this.shouldIgnore(filePath)) {
+                    if (!destinationDirCreated) {
+                        await fs.mkdir(destination, {recursive: true});
+                        destinationDirCreated = true;
+                    }
                     await fs.copyFile(filePath, destinationPath);
                     copiedFiles.push(filePath);
                     debug(`Copied file ${file} to ${destinationPath}`);
