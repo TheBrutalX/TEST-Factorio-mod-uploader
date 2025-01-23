@@ -1,5 +1,5 @@
 {
-    "name": "factiorio-release-action",
+    "name": "factorio-release-action",
     "version": "2.0.1",
     "description": "Automated process for automatic release factorio mod",
     "main": "dist/bundle.js",
