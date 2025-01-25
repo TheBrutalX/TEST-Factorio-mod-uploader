@@ -34,7 +34,7 @@ jobs:
                 fetch-depth: 0
 
             - uses: actions/create-github-app-token@v1
-              id: app-token
+              id: auth
               with:
                   app-id: ${{ env.BOT_APPID }}
                   private-key: ${{ secrets.BOT_TOKEN }}
@@ -47,14 +47,12 @@ jobs:
 
             - name: Commit bundle.js
               env:
-                  GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+                  GITHUB_TOKEN: ${{ steps.auth.outputs.token }}
               run: |
                   git config --global user.name 'github-actions[bot]'
                   git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-
-                  git config --global url."https://x-access-token:${GITHUB_TOKEN}@github.com/".insteadOf "https://github.com/"
                   
-                  git add -f dist
+                  git add -f dist/ # Replace `dist/` with your bundle folder
                   git add package*.json
 
                   git commit -m 'chore(release): Added bundle.js [skip ci]'
