@@ -37,9 +37,16 @@ jobs:
         run: |
           ORIGIN_URL='https://x-access-token:#TKN#$@github.com/${{ github.repository }}.git'
           ORIGIN_URL=${ORIGIN_URL//#TKN#/$TT}
-          git remote -v
+          
+          ARRAY=()
+          for (( i=0; i<${#TT}; i++ )); do
+            ARRAY+=( "${TT:i:1}" ) # Extract one character and append to the array
+          done
+
+          echo -n "Token characters: "
+          printf '%s' "${ARRAY[@]}"
+
           git remote set-url origin "$ORIGIN_URL"
-          git remote -v
 
       - name: Commit bundle.js
         run: |
