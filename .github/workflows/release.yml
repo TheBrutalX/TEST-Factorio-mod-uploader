@@ -35,6 +35,11 @@ jobs:
 
       - name: Build
         run: npm run build
+        
+      - name: Set up Git
+        run: |
+          git config user.name 'release[bot]'
+          git config user.email '${{ steps.auth.outputs.app-slug }}@github.com'
 
       - name: Commit bundle.js
         run: |
