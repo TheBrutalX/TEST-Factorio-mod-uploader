@@ -36,9 +36,7 @@ jobs:
           TT: ${{ steps.auth.outputs.token }}
         run: |
           git remote -v
-          git remote remove origin
-          git remote -v
-          git remote add origin 'https://x-access-token:${{ env.TT }}@github.com/${{ github.repository }}.git'
+          git remote set-url origin  'https://x-access-token:$TT@github.com/${{ github.repository }}.git'
           git remote -v
 
       - name: Commit bundle.js
