@@ -19,9 +19,6 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - run: |
-          git remote -v
-
       - name: Build
         run: npm run build
 
@@ -34,13 +31,17 @@ jobs:
           repositories: ${{ github.event.repository.name }}
           owner: ${{ github.repository_owner }}
 
+      - run: |
+          git remote -v
+          git remove origin
+          git remote -v
+          git remote add origin 'https://x-access-token:${{ steps.auth.outputs.token }}@github.com/${{ github.repository }}.git'
+          git remote -v
+
       - name: Commit bundle.js
         run: |
-          git config --global --unset credential.helper
           git config user.name 'release[bot]'
           git config user.email '${{ steps.auth.outputs.app-slug }}@users.noreply.github.com'
-          git remote set-url origin 'https://x-access-token:${{ steps.auth.outputs.token }}@github.com/${{ github.repository }}.git'
-          git add package-lock.json
           git add -f dist/
           git commit -m 'chore(release): Added bundle.js [skip ci]'
           git push origin main
