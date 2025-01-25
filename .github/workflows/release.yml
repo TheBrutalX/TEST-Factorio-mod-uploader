@@ -34,7 +34,7 @@ jobs:
               id: auth
               with:
                   app-id: ${{ secrets.APP_ID }}
-                  private-key: ${{ secrets.APP_TOKEN }}
+                  private-key: ${{ secrets.APP_KEY }}
 
             - name: Configure GIT
               env: 
