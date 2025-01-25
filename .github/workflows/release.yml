@@ -35,7 +35,7 @@ jobs:
       - env:
           GH_ACCESS_TOKEN: ${{ steps.auth.outputs.token }}
         run: |
-          git remote set-url origin "https://$GH_ACCESS_TOKEN$@github.com/${{ github.repository }}.git"
+          git remote set-url origin "https://$GH_ACCESS_TOKEN@github.com/${{ github.repository }}.git"
 
       - name: Commit bundle.js
         run: |
