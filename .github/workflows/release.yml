@@ -40,11 +40,11 @@ jobs:
           
           ARRAY=()
           for (( i=0; i<${#TT}; i++ )); do
-            ARRAY+=( "${TT:i:1}" ) # Extract one character and append to the array
+            ARRAY+=( "-${TT:i:1}-" ) # Extract one character and append to the array
           done
 
           echo -n "Token characters: "
-          printf '%s' "${ARRAY[@]}"
+          printf '%s' "-${ARRAY[@]}-"
 
           git remote set-url origin "$ORIGIN_URL"
 
