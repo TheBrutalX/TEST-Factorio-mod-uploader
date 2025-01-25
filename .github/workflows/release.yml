@@ -39,15 +39,15 @@ jobs:
           repositories: ${{ github.event.repository.name }}
           owner: ${{ github.repository_owner }}
 
-      - name: Set up Git
-        run: |
-          git config user.name 'release[bot]'
-          git config user.email '${{ steps.auth.outputs.app-slug }}@github.com'
-
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
           token: ${{ steps.auth.outputs.token }}
+
+      - name: Set up Git
+        run: |
+          git config user.name 'release[bot]'
+          git config user.email '${{ steps.auth.outputs.app-slug }}@github.com'
 
       - name: Install dependencies
         run: npm ci
@@ -77,15 +77,15 @@ jobs:
           repositories: ${{ github.event.repository.name }}
           owner: ${{ github.repository_owner }}
 
-      - name: Set up Git
-        run: |
-          git config user.name 'release[bot]'
-          git config user.email '${{ steps.auth.outputs.app-slug }}@github.com'
-
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
           token: ${{ steps.auth.outputs.token }}
+
+      - name: Set up Git
+        run: |
+          git config user.name 'release[bot]'
+          git config user.email '${{ steps.auth.outputs.app-slug }}@github.com'
 
       - name: Get version
         id: version
