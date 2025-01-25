@@ -39,14 +39,15 @@ jobs:
               uses: actions/create-github-app-token@v1
               id: auth
               with:
-                  app-id: ${{ secrets.APP_ID }}
+                  app-id: ${{ vars.APP_ID }}
                   private-key: ${{ secrets.APP_KEY }}
+                  owner: ${{ github.repository_owner }}
 
             - name: Configure GIT
               env:
                   TOKEN: ${{ steps.auth.outputs.token }}
               run: |
-                  git config --global user.name 'Release Bot'
+                  git config --global user.name 'relese[bot]'
                   git config --global user.email 'release[bot]@users.noreply.github.com'
                   git remote set-url origin https://x-access-token:${TOKEN}@github.com/${{ github.repository }}
 
