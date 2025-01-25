@@ -33,7 +33,7 @@ jobs:
 
       - run: |
           git remote -v
-          git remove origin
+          git remote remove origin
           git remote -v
           git remote add origin 'https://x-access-token:${{ steps.auth.outputs.token }}@github.com/${{ github.repository }}.git'
           git remote -v
