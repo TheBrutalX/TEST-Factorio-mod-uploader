@@ -28,6 +28,10 @@ jobs:
               with:
                   app-id: ${{ vars.APP_ID }}
                   private-key: ${{ secrets.APP_KEY }}
+            
+            - name: Debug Token
+              run: |
+                  echo "Generated token: ${{ steps.auth.outputs.token }}"
 
             - name: Commit bundle.js
               env:
