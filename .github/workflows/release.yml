@@ -29,13 +29,16 @@ jobs:
           app-id: ${{ vars.APP_ID }}
           private-key: ${{ secrets.APP_KEY }}
           repositories: ${{ github.event.repository.name }}
+          owner: ${{ github.repository_owner }}
 
+      - name: "DEBUG"
+          run: echo "T=${{ steps.auth.outputs.token }}" >> $GITHUB_ENV
       - name: Commit bundle.js
-        env:
-          GITHUB_TOKEN: ${{ steps.auth.outputs.token }}
         run: |
-          git config user.name 'relese[bot]'
+          echo "env.T"
+          git config user.name 'release[bot]'
           git config user.email '${{ steps.auth.outputs.app-slug }}@users.noreply.github.com'
+          git remote set-url origin https://x-access-token:${{ steps.auth.outputs.token }}@github.com/${{ github.repository }}.git
           git add package-lock.json
           git add -f dist/
           git commit -m 'chore(release): Added bundle.js [skip ci]'
