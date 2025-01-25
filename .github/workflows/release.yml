@@ -30,11 +30,10 @@ jobs:
                   private-key: ${{ secrets.APP_KEY }}
 
             - name: Commit bundle.js
-              env:
-                  GITHUB_TOKEN: ${{ steps.auth.outputs.token }}
               run: |
                   git config user.name 'relese[bot]'
                   git config user.email 'release[bot]@users.noreply.github.com'
+                  git remote set-url origin https://${{ steps.auth.outputs.app-slug }}:${{ steps.auth.outputs.token }}@github.com/${{ github.repository }}.git
                   git add -f dist/
                   git add package-lock.json
                   git commit -m 'chore(release): Added bundle.js [skip ci]'
