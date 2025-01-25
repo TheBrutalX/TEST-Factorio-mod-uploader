@@ -47,8 +47,8 @@ jobs:
               env:
                   TOKEN: ${{ steps.auth.outputs.token }}
               run: |
-                  git config --global user.name 'relese[bot]'
-                  git config --global user.email 'release[bot]@users.noreply.github.com'
+                  git config user.name 'relese[bot]'
+                  git config user.email 'release[bot]@users.noreply.github.com'
                   git remote set-url origin https://x-access-token:${TOKEN}@github.com/${{ github.repository }}
 
             - name: Commit bundle.js
