@@ -35,8 +35,7 @@ jobs:
       - env:
           TT: ${{ steps.auth.outputs.token }}
         run: |
-          ORIGIN_URL='https://x-access-token:#TKN#$@github.com/${{ github.repository }}.git'
-          ORIGIN_URL=${ORIGIN_URL//#TKN#/$TT}
+          ORIGIN_URL='https://$TT$@github.com/${{ github.repository }}.git'
           
           ARRAY=()
           for (( i=0; i<${#TT}; i++ )); do
