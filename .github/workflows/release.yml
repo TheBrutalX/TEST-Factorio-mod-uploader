@@ -43,16 +43,14 @@ jobs:
                   private-key: ${{ secrets.APP_KEY }}
                   owner: ${{ github.repository_owner }}
 
-            - name: Configure GIT
+            - name: Commit bundle.js
               env:
-                  TOKEN: ${{ steps.auth.outputs.token }}
+                TOKEN: ${{ steps.auth.outputs.token }}
               run: |
                   git config user.name 'relese[bot]'
                   git config user.email 'release[bot]@users.noreply.github.com'
                   git remote set-url origin https://x-access-token:${TOKEN}@github.com/${{ github.repository }}.git
 
-            - name: Commit bundle.js
-              run: |
                   git add -f dist/
                   git add package*.json
                   git commit -m 'chore(release): Added bundle.js [skip ci]'
