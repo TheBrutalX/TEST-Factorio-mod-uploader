@@ -1,42 +1,37 @@
 name: Release
 
 on:
-    push:
-        branches: 
-          - main
-        paths-ignore: 
-          - '**.md'
+  push:
+    branches: 
+      - main
+    paths-ignore: 
+      - '**.md'
 
 jobs:
-    build:
-        runs-on: ubuntu-latest
+  build:
+    runs-on: ubuntu-latest
 
-        steps:
-            - uses: actions/checkout@v4
-              with:
-                fetch-depth: 0
-                
-            - name: Install dependencies
-              run: npm ci
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-            - name: Build
-              run: npm run build
+      - name: Install dependencies
+        run: npm ci
 
-            - name: App Authentication
-              uses: actions/create-github-app-token@v1
-              id: auth
-              with:
-                  app-id: ${{ vars.APP_ID }}
-                  private-key: ${{ secrets.APP_KEY }}
+      - name: App Authentication
+        uses: actions/create-github-app-token@v1
+        id: auth
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.APP_KEY }}
 
-            - name: Commit bundle.js
-              run: |
-                  git config user.name 'relese[bot]'
-                  git config user.email 'release[bot]@users.noreply.github.com'
-                  git remote set-url origin https://x-access-token:${{ steps.auth.outputs.token }}@github.com/${{ github.repository }}.git
-                  git add -f dist/
-                  git add package-lock.json
-                  git commit -m 'chore(release): Added bundle.js [skip ci]'
-                  git push origin main
-
-
+      - name: Commit bundle.js
+        run: |
+          user-id=$(gh api "/users/${{ steps.auth.outputs.app-slug }}[bot]" --jq .id)
+          git config user.name 'relese[bot]'
+          git config user.email '$user_id+${{ steps.auth.outputs.app-slug }}@users.noreply.github.com'
+          git remote set-url origin https://x-access-token:${{ steps.auth.outputs.token }}@github.com/${{ github.repository }}.git
+          git add package-lock.json
+          git commit -m 'chore(release): Added bundle.js [skip ci]'
+          git push origin main
