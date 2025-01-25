@@ -68,6 +68,7 @@ jobs:
       - name: Commit bundle.js
         run: |
           git add -f dist/
+          git add package-lock.json
           git commit -m 'chore(release): Added bundle.js [skip ci]'
           git push
 
