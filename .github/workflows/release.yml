@@ -32,7 +32,8 @@ jobs:
           owner: ${{ github.repository_owner }}
 
       - name: "DEBUG"
-          run: echo "T=${{ steps.auth.outputs.token }}" >> $GITHUB_ENV
+        run: echo "T=${{ steps.auth.outputs.token }}" >> $GITHUB_ENV
+
       - name: Commit bundle.js
         run: |
           echo "env.T"
