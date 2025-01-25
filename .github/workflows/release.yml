@@ -41,13 +41,13 @@ jobs:
               with:
                   app-id: ${{ vars.APP_ID }}
                   private-key: ${{ secrets.APP_KEY }}
-                  owner: ${{ github.repository_owner }}
 
             - name: Commit bundle.js
+              env:
+                GITHUB_TOKEN: ${{ steps.auth.outputs.token }}
               run: |
                   git config user.name 'relese[bot]'
                   git config user.email 'release[bot]@users.noreply.github.com'
-                  git remote set-url origin https://x-access-token:${{ steps.auth.outputs.token }}@github.com/${{ github.repository }}.git
 
                   git add -f dist/
                   git add package*.json
