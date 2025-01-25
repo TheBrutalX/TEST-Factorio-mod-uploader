@@ -25,7 +25,6 @@ jobs:
           repositories: ${{ github.event.repository.name }}
           owner: ${{ github.repository_owner }}
 
-
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -36,14 +35,6 @@ jobs:
 
       - name: Build
         run: npm run build
-        
-      - name: Set up Git
-        env:
-          GH_ACCESS_TOKEN: ${{ steps.auth.outputs.token }}
-        run: |
-          git config user.name 'release[bot]'
-          git config user.email '${{ steps.auth.outputs.app-slug }}@github.com'
-          git remote set-url origin "https://$GH_ACCESS_TOKEN@github.com/${{ github.repository }}.git"
 
       - name: Commit bundle.js
         run: |
