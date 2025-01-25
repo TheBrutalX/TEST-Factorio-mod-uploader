@@ -13,8 +13,7 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
-    
+
     steps:
       - name: App Authentication
         uses: actions/create-github-app-token@v1
