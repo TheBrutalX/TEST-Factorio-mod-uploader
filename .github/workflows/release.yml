@@ -37,12 +37,10 @@ jobs:
                   private-key: ${{ secrets.APP_KEY }}
 
             - name: Configure GIT
-              env: 
-                GH_TOKEN: ${{ steps.auth.outputs.token }}
               run: |
                   git config --global user.name 'github-actions[bot]'
                   git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-                  git remote set-url origin https://x-access-token:$GH_TOKEN@github.com/$GITHUB_REPOSITORY
+                  git remote set-url origin https://x-access-token:${{ steps.auth.outputs.token }}@github.com/${{ GITHUB_REPOSITORY }}
 
             - name: Install dependencies
               run: npm ci
