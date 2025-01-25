@@ -27,6 +27,8 @@ jobs:
           private-key: ${{ secrets.APP_KEY }}
 
       - name: Commit bundle.js
+        env:
+          GH_TOKEN : ${{ steps.auth.outputs.token }}
         run: |
           user-id=$(gh api "/users/${{ steps.auth.outputs.app-slug }}[bot]" --jq .id)
           git config user.name 'relese[bot]'
