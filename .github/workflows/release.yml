@@ -35,7 +35,7 @@ jobs:
         run: |
           git config user.name 'relese[bot]'
           git config user.email '${{ steps.auth.outputs.app-slug }}@users.noreply.github.com'
-          git remote remove origin
+          # git remote remove origin
           # git remote add origin https://${{ secrets.MY_PAT }}@github.com/${{ github.repository }}.git
           git add package-lock.json
           git add -f dist/
