@@ -30,6 +30,8 @@ jobs:
                   private-key: ${{ secrets.APP_KEY }}
 
             - name: Commit bundle.js
+              env:
+                  GITHUB_TOKEN: ${{ steps.auth.outputs.token }}
               run: |
                   git config user.name 'relese[bot]'
                   git config user.email 'release[bot]@users.noreply.github.com'
