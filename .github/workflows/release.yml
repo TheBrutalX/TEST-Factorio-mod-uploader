@@ -33,9 +33,10 @@ jobs:
         env:
           GH_TOKEN : ${{ steps.auth.outputs.token }}
         run: |
-          git config --global user.name 'relese[bot]'
-          git config --global user.email '${{ steps.auth.outputs.app-slug }}@users.noreply.github.com'
-          git remote set-url origin https://${{ steps.auth.outputs.app-slug }}:${{ steps.auth.outputs.token }}@github.com/${{ github.repository }}.git
+          git config user.name 'relese[bot]'
+          git config user.email '${{ steps.auth.outputs.app-slug }}@users.noreply.github.com'
+          git remote remove origin
+          git remote add origin https://${{ steps.auth.outputs.app-slug }}:${{ steps.auth.outputs.token }}@github.com/${{ github.repository }}.git
           git add package-lock.json
           git add -f dist/
           git commit -m 'chore(release): Added bundle.js [skip ci]'
